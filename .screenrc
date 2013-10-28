@@ -1,0 +1,34 @@
+startup_message off
+
+# allow bold colors
+attrcolor b ".I"
+
+# tell screen how to set colors
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo xterm-color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#termcapinfo xterm* ti@:te@
+term xterm-256color
+
+# increase scrollback buffer.  Default is 100 lines.
+defscrollback 2000
+
+# configure footer status bar
+hardstatus alwayslastline
+hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+Lw%?%?%= %{b}][%{C} %Y.%m.%d %{W}%0c %{b}]"
+
+# erase background with current bg color.
+defbce off
+
+# Make navigating between regions easier
+bind s split
+bind j focus down
+bind k focus up
+
+# Make resizing regions easier
+bind = resize =
+bind + resize +1
+bind - resize -1
+
+# prevents applications from leaving their content on the screen.
+altscreen on
