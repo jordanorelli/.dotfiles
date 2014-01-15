@@ -2,6 +2,7 @@
 " 	Ian Tegebo <ian.tegebo@gmail.com>
 
 augroup filetypedetect
-au BufNewFile,BufRead *.wiki setf Wikipedia
+  au BufNewFile,BufRead *.wiki setf Wikipedia
+  au BufNewFile,BufRead *.gradle setf groovy
 augroup END
 
