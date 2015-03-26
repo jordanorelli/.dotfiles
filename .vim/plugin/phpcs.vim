@@ -33,8 +33,8 @@ if !exists('Vimphpcs_Phpcscmd')
         let Vimphpcs_Phpcscmd='phpcs '
     else
         " Unable to find the CodeSniffer executable
-        echomsg 'Unable to find phpcs in the current PATH.'
-        echomsg 'Plugin not loaded.'
+        " echomsg 'Unable to find phpcs in the current PATH.'
+        " echomsg 'Plugin not loaded.'
         let &cpo = s:keepcpo
         finish
     endif
