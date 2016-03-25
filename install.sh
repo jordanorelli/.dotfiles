@@ -2,7 +2,7 @@
 
 BACKUP_DIR="$HOME/.dotfiles_backup"
 BASE_DIR="$HOME/.dotfiles"
-INCLUDE=".bashrc .bash_profile .vimrc .vim .screenrc"
+INCLUDE=".bashrc .bash_profile .vimrc .vim .screenrc .tmux.conf"
 
 echo "backing up existing dotfiles into $BACKUP_DIR"
 mkdir -p "$BACKUP_DIR"
