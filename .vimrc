@@ -6,8 +6,22 @@ set nocompatible
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+    " let Vundle manage Vundle, required
+    Plugin 'VundleVim/Vundle.vim'
+
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'tpope/vim-surround'
+    Plugin 'tpope/vim-rails'
+    Plugin 'slim-template/vim-slim'
+    Plugin 'kchmck/vim-coffee-script'
+    Plugin 'fatih/vim-go'
+    Plugin 'nanotech/jellybeans.vim'
+    Plugin 'ervandew/supertab'
+
+call vundle#end()            " required
+
+filetype plugin indent on    " required
+
 
 set backspace=indent,eol,start
 set autoindent
@@ -60,7 +74,7 @@ if &t_Co > 2 || has("gui_running")
   syntax on                         " turns on syntax highlighting
   set hlsearch                      " highlights the last searched pattern.
   set t_Co=256                      " enable 256 color mode
-  " colorscheme jellybeans
+  colorscheme jellybeans
 endif
 
 if has("autocmd")
@@ -128,3 +142,11 @@ nmap <leader>n :set nu!<CR>
 
 " press escape twice to clear highlight search
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+
+" use omnicomplete by default
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+" close doc window after finishing an autocomplete
+let g:SuperTabClosePreviewOnPopupClose = 1
+
+" supress go fmt errors on file write
+let g:go_fmt_fail_silently = 1
