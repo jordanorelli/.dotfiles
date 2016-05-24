@@ -34,6 +34,16 @@ export PS1="\[\e[0;32m\]\u@\h[\j] \w: \[\e[m\]"
 
 export EDITOR=vim
 
+case $( uname -s ) in
+Darwin)
+    echo "Using OSX bash settings."
+    alias ls="ls -G"
+    ;;
+*)
+    echo "No platform-specific bash settings are enabled."
+    ;;
+esac
+
 if [ -f "$HOME/.localrc" ]; then
     source "$HOME/.localrc"
 fi
