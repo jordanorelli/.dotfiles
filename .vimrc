@@ -17,6 +17,7 @@ call vundle#begin()
     Plugin 'fatih/vim-go'
     Plugin 'nanotech/jellybeans.vim'
     Plugin 'ervandew/supertab'
+    Plugin 'scrooloose/nerdtree'
 
 call vundle#end()            " required
 
@@ -150,3 +151,9 @@ let g:SuperTabClosePreviewOnPopupClose = 1
 
 " supress go fmt errors on file write
 let g:go_fmt_fail_silently = 1
+
+" move by visual lines when mapping instead of physical lines
+noremap  <buffer> <silent> k gk
+noremap  <buffer> <silent> j gj
+noremap  <buffer> <silent> 0 g0
+noremap  <buffer> <silent> $ g$
