@@ -23,4 +23,8 @@ for FNAME in $INCLUDE; do
 	# symlink in the versioned dotfiles.
 	echo "ln $BASE_DIR/$FNAME" "$HOME/$FNAME"
 	ln -sf "$BASE_DIR/$FNAME" "$HOME/$FNAME"
+
+    # setup Vundle
+    echo "cloning Vundle"
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 done
