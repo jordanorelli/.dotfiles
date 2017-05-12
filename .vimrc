@@ -18,6 +18,7 @@ call vundle#begin()
     Plugin 'nanotech/jellybeans.vim'
     Plugin 'ervandew/supertab'
     Plugin 'scrooloose/nerdtree'
+    Plugin 'Align'
 
 call vundle#end()            " required
 
