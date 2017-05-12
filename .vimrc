@@ -76,7 +76,11 @@ if &t_Co > 2 || has("gui_running")
   syntax on                         " turns on syntax highlighting
   set hlsearch                      " highlights the last searched pattern.
   set t_Co=256                      " enable 256 color mode
-  colorscheme jellybeans
+  try
+    colorscheme jellybeans
+  catch
+    silent! colorscheme delek
+  endtry
 endif
 
 if has("autocmd")
