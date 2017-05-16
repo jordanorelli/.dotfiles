@@ -19,6 +19,8 @@ call vundle#begin()
     Plugin 'ervandew/supertab'
     Plugin 'scrooloose/nerdtree'
     Plugin 'Align'
+    Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
+    Plugin 'endel/flashdevelop.vim'
 
 call vundle#end()            " required
 

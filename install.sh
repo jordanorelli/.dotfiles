@@ -4,6 +4,11 @@ BACKUP_DIR="$HOME/.dotfiles_backup"
 BASE_DIR="$HOME/.dotfiles"
 INCLUDE=".bashrc .bash_profile .vimrc .vim .screenrc .tmux.conf"
 
+if [[ -d "$BACKUP_DIR" ]] ; then
+    echo "removing previous backup at $BACKUP_DIR"
+    rm -rf "$BACKUP_DIR"
+fi
+
 echo "backing up existing dotfiles into $BACKUP_DIR"
 mkdir -p "$BACKUP_DIR"
 for FNAME in $INCLUDE; do
