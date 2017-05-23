@@ -21,6 +21,9 @@ call vundle#begin()
     Plugin 'Align'
     Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
     Plugin 'endel/flashdevelop.vim'
+    Plugin 'airblade/vim-rooter'
+    Plugin 'ctrlpvim/ctrlp.vim'
+    Plugin 'vim-airline/vim-airline'
 
 call vundle#end()            " required
 
@@ -41,6 +44,7 @@ set showcmd                         " display incomplete commands
 set incsearch                       " incremental searching
 set ignorecase                      " case-insensitive searching
 set smartcase
+set laststatus=2                    " always show the status line
 
 " set scrolloff=3                     " scroll when 3 lines from edge
 " set sidescroll=5                    " scroll when 5 chars from the right
@@ -116,7 +120,7 @@ if has("autocmd")
 
   " causes VIM to enter the directory of the file being edited to simplify
   " finding related files.
-  autocmd BufEnter * cd %:p:h
+  " autocmd BufEnter * cd %:p:h
 
   " add proper coloring for my .localrc file
   au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
@@ -164,3 +168,10 @@ noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 noremap  <buffer> <silent> 0 g0
 noremap  <buffer> <silent> $ g$
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" open up directories with a single click instead of needing to double-click
+let g:NERDTreeMouseMode=2
