@@ -12,6 +12,7 @@ call vundle#begin()
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-surround'
     Plugin 'tpope/vim-rails'
+    Plugin 'tpope/vim-repeat'
     Plugin 'slim-template/vim-slim'
     Plugin 'kchmck/vim-coffee-script'
     Plugin 'fatih/vim-go'
@@ -22,8 +23,17 @@ call vundle#begin()
     Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
     Plugin 'endel/flashdevelop.vim'
     Plugin 'airblade/vim-rooter'
+    Plugin 'airblade/vim-gitgutter'
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'vim-airline/vim-airline'
+    Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'heavenshell/vim-jsdoc'
+
+    " Past plugins
+    "
+    " Seems to break NERDTree. I dunno why. Kinda problematic since it's
+    " intended to improve NERDTree.
+    " Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 call vundle#end()            " required
 
@@ -54,6 +64,11 @@ set linebreak                       " soft text wrapping
 set nobackup                        " disable temporary files.
 set nowritebackup
 set noswapfile
+set updatetime=750                  " wait 750ms after typing for updates. default is 4000
+set hidden                          " hide buffers instead of closing them
+
+set visualbell                      " don't beep
+set noerrorbells                    " don't beep
 
 set wildmenu                        " enabled the wild menu.
 set wildmode=list:full              " list matches
@@ -120,7 +135,7 @@ if has("autocmd")
 
   " causes VIM to enter the directory of the file being edited to simplify
   " finding related files.
-  " autocmd BufEnter * cd %:p:h
+  autocmd BufEnter * cd %:p:h
 
   " add proper coloring for my .localrc file
   au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
@@ -174,4 +189,22 @@ let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 " open up directories with a single click instead of needing to double-click
-let g:NERDTreeMouseMode=2
+let g:NERDTreeMouseMode = 2
+
+" fix windows arrows. This gets rid of the pretty arrows on other systems,
+" will have to restore that properly. The default switching behavior is broken
+" inside of msys2.
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+
+" enable dir tree arrows
+let g:NERDTreeDirArrows = 1
+
+" By default all files and directories trigger vim-rooter. Setting the targets
+" causes it to only trigger on directories.
+let g:rooter_targets = '/'
+
+" new command mode command: w!!
+" allows you to sudo write the file you're currently editing without closing
+" (and thus losing) your changes.
+cmap w!! w !sudo tee % >/dev/null
