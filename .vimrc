@@ -106,7 +106,6 @@ endif
 
 if has("autocmd")
   filetype plugin indent on         " Enable file type detection.
-:q
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
