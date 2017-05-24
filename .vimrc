@@ -65,7 +65,7 @@ set nobackup                        " disable temporary files.
 set nowritebackup
 set noswapfile
 set updatetime=750                  " wait 750ms after typing for updates. default is 4000
-set hidden                          " hide buffers instead of closing them
+" set hidden                          " hide buffers instead of closing them
 
 set visualbell                      " don't beep
 set noerrorbells                    " don't beep
@@ -106,6 +106,7 @@ endif
 
 if has("autocmd")
   filetype plugin indent on         " Enable file type detection.
+:q
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
@@ -135,7 +136,7 @@ if has("autocmd")
 
   " causes VIM to enter the directory of the file being edited to simplify
   " finding related files.
-  autocmd BufEnter * cd %:p:h
+  autocmd BufEnter * silent! lcd %:p:h
 
   " add proper coloring for my .localrc file
   au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
@@ -153,19 +154,19 @@ if has("multi_byte")
 endif
 
 " Shortcut to show invisible characters
-nmap <leader>l :set list!<CR>
+nnoremap <leader>l :set list!<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tab navigation helpers
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrl-k to go to the next tab
-map <C-k> :tabn<CR>
+noremap <C-k> :tabn<CR>
 " ctrl-j to go to the previous tab
-map <C-j> :tabp<CR>
+noremap <C-j> :tabp<CR>
 " ctrl-n to open a new tab with the current file
-map <C-n> :tabnew %<CR>
+noremap <C-n> :tabnew %<CR>
 
-nmap <leader>n :set nu!<CR>
+nnoremap <leader>n :set nu!<CR>
 
 " press escape twice to clear highlight search
 nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
@@ -179,10 +180,10 @@ let g:SuperTabClosePreviewOnPopupClose = 1
 let g:go_fmt_fail_silently = 1
 
 " move by visual lines when mapping instead of physical lines
-noremap  <buffer> <silent> k gk
-noremap  <buffer> <silent> j gj
-noremap  <buffer> <silent> 0 g0
-noremap  <buffer> <silent> $ g$
+noremap <buffer> <silent> k gk
+noremap <buffer> <silent> j gj
+noremap <buffer> <silent> 0 g0
+noremap <buffer> <silent> $ g$
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -207,4 +208,11 @@ let g:rooter_targets = '/'
 " new command mode command: w!!
 " allows you to sudo write the file you're currently editing without closing
 " (and thus losing) your changes.
-cmap w!! w !sudo tee % >/dev/null
+cnoremap w!! w !sudo tee % >/dev/null
+
+" leader ev to edit your vim rc
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+iabbrev @@ @jordanorelli
