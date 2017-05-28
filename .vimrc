@@ -18,6 +18,7 @@ call vundle#begin()
     Plugin 'fatih/vim-go'
     Plugin 'nanotech/jellybeans.vim'
     Plugin 'ervandew/supertab'
+    Plugin 'scrooloose/nerdcommenter'
     Plugin 'scrooloose/nerdtree'
     Plugin 'Align'
     Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
@@ -64,7 +65,7 @@ set linebreak                       " soft text wrapping
 set nobackup                        " disable temporary files.
 set nowritebackup
 set noswapfile
-set updatetime=750                  " wait 750ms after typing for updates. default is 4000
+set updatetime=750                  " wait 750ms after typing for updates
 " set hidden                          " hide buffers instead of closing them
 
 set visualbell                      " don't beep
@@ -109,10 +110,14 @@ if has("autocmd")
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
+    " delete existing definitions for this group
     au!
 
     " For all text files set 'textwidth' to 78 characters.
     autocmd FileType text setlocal textwidth=78
+
+    " on some machines md files are thought to be modula2
+    autocmd BufNewFile,BufRead *.md set filetype=markdown
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -124,24 +129,27 @@ if has("autocmd")
       \   exe "normal! g`\"" |
       \ endif
 
+    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+    autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+    autocmd FileType python set omnifunc=pythoncomplete#Complete
+    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+    " causes VIM to enter the directory of the file being edited to simplify
+    " finding related files.
+    autocmd BufEnter * silent! lcd %:p:h
+
+    autocmd FileType go :iabbrev iff if {<cr>}<up><right>
+    autocmd FileType javascript :iabbrev iff if
+    autocmd FileType javascript :iabbrev fun function
+
+    " add proper coloring for my .localrc file
+    au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
+
+    " add Coloring for ChucK source
+    au! BufNewFile,BufRead *.ck setf ck
   augroup END
-
-  autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-  autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-  autocmd FileType python set omnifunc=pythoncomplete#Complete
-  autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-
-  " causes VIM to enter the directory of the file being edited to simplify
-  " finding related files.
-  autocmd BufEnter * silent! lcd %:p:h
-
-  " add proper coloring for my .localrc file
-  au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
-
-  " add Coloring for ChucK source
-  au! BufNewFile,BufRead *.ck setf ck
 else
 
 endif " has("autocmd")
@@ -155,9 +163,9 @@ endif
 " Shortcut to show invisible characters
 nnoremap <leader>l :set list!<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tab navigation helpers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ctrl-k to go to the next tab
 noremap <C-k> :tabn<CR>
 " ctrl-j to go to the previous tab
@@ -186,7 +194,10 @@ noremap <buffer> <silent> $ g$
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_user_command = [
+      \'.git',
+      \'cd %s && git ls-files -co --exclude-standard'
+      \]
 
 " open up directories with a single click instead of needing to double-click
 let g:NERDTreeMouseMode = 2
@@ -215,3 +226,20 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
 iabbrev @@ @jordanorelli
+
+noremap <Leader>ci NERDComInvertComment
+
+let g:NERDDefaultAlign='left'
+let g:NERDSpaceDelims=1
+
+" new text object: "next paren". means the next open paren on the current
+" line.
+onoremap in( :<c-u>normal! f(ci(<cr>
+
+" new text object: "last paren". means the previous open paren on the current
+" line. (using p would shadow the paragraph object)
+onoremap il( :<c-u>normal! F)vi(<cr>
+
+" command mode abbreviation :vhelp to open help text in a vertical split
+" instead of a horizontal split.
+cabbrev vhelp vertical help

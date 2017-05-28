@@ -12,6 +12,7 @@ include=(
     .tmux.conf
     .vim/ftplugin/javascript.vim
     .vim/ftplugin/ruby.vim
+    .vim/ftplugin/vim.vim
     .vimrc
 )
 
@@ -31,33 +32,34 @@ for filename in ${include[@]}; do
     echo "dest path:   $dest_path"
     echo "backup path: $backup_path"
 
-	# if a file doesn't actually exist in the repo, do nothing.
+    # if a file doesn't actually exist in the repo, do nothing.
     if [[ ! -a "$source_path" ]]; then
         echo "no file found at source path $source_path, skipping"
-		continue
-	fi
+        continue
+    fi
 
-	# back up existing dotfiles, just for safety
-	if [[ -a "$dest_path" ]]; then
+    # back up existing dotfiles, just for safety
+    if [[ -a "$dest_path" ]]; then
         if [[ -h "$dest_path" ]]; then
             # existing file is a symlink. delete it.
             echo "removing old link at $dest_path"
             rm "$dest_path"
         else
             # existing file is an original preferences file. archive it.
+            echo "archiving existing preferences file at $dest_path"
             if [[ ! -d $(dirname "$backup_path") ]]; then
                 mkdir -pv $(dirname "$backup_path")
             fi
-            echo "archiving old preferences file at $dest_path"
             mv -v "$dest_path" "$backup_path"
-            echo "ok we archived it"
         fi
-	fi
+    fi
 
-	# symlink in the versioned dotfiles.
-    echo "linking preferences file"
-	ln -sv "$source_path" "$dest_path"
-    echo "ok we linked it"
+    if [[ ! -d $(dirname "$dest_path") ]]; then
+        mkdir -p $(dirname "$dest_path")
+    fi
+
+    # symlink in the versioned dotfiles.
+    ln -sv "$source_path" "$dest_path"
     echo "--------------------------------------------------------------------------------"
 done
 
