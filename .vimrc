@@ -1,11 +1,9 @@
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" Plugins {{{
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
     " let Vundle manage Vundle, required
     Plugin 'VundleVim/Vundle.vim'
 
@@ -34,90 +32,144 @@ call vundle#begin()
     " Seems to break NERDTree. I dunno why. Kinda problematic since it's
     " intended to improve NERDTree.
     " Plugin 'Xuyuanp/nerdtree-git-plugin'
-
 call vundle#end()            " required
 
-filetype plugin indent on    " required
+" enable the filetype plugin
+filetype plugin indent on
 
+" }}}
 
+" Whitespace {{{
+" allow backspacing over line breaks
 set backspace=indent,eol,start
+
+" copy indent form current line when starting a new line
 set autoindent
+
+" automatically add an indent after block-opening symbols like {
 set smartindent
+
+" display tab as 4 characters wide instead of 8
 set tabstop=4
-set expandtab                       " holy war
-set smarttab                        " I don't know what this does.
+
+" use 4 spaces when creating a new indentation level with autoindentation
 set shiftwidth=4
 
-set history=50                      " keep 50 lines of command line history
-set ruler                           " show the cursor position all the time
-set showcmd                         " display incomplete commands
-set incsearch                       " incremental searching
-set ignorecase                      " case-insensitive searching
+" tab key inserts spaces
+set expandtab
+
+" no matter how many times I read the help text on this I still don't
+" understand what it does, but I've had it in here for years so I'm just
+" leaving it.
+set smarttab
+
+" set whitespace characters
+set listchars=tab:>-,trail:.,extends:#
+" }}}
+
+" Search {{{
+" perform searches incrementally
+set incsearch
+
+" perform case-insensitive searches
+set ignorecase
+
+" if a search term includes upper case letters, use a cast-sensitive search
 set smartcase
-set laststatus=2                    " always show the status line
 
-" set scrolloff=3                     " scroll when 3 lines from edge
-" set sidescroll=5                    " scroll when 5 chars from the right
-set wrap                            " wrap text
-set linebreak                       " soft text wrapping
+" highlights the last searched pattern
+set hlsearch
 
-set nobackup                        " disable temporary files.
+" press escape twice to clear highlight search
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+" }}}
+
+" Backup {{{
+set nobackup
 set nowritebackup
 set noswapfile
+" }}}
+
+set history=50                      " keep 50 lines of command line history
+
+" show commands as you type them
+set showcmd
+
+" wrap long lines
+set wrap
+
+" force line wrapping to only happen at word boundaries
+set linebreak
+
 set updatetime=750                  " wait 750ms after typing for updates
-" set hidden                          " hide buffers instead of closing them
 
-set visualbell                      " don't beep
-set noerrorbells                    " don't beep
+set autochdir                       " set current working directory on file enter
 
-set wildmenu                        " enabled the wild menu.
-set wildmode=list:full              " list matches
+" no beeping {{{
+" use visual bell instead of beeping
+set visualbell
+
+" you know what, just disable the error bells entirely
+set noerrorbells
+"}}}
+
+" Wild Menu {{{
+
+" enabled the wild menu.
+set wildmenu
+
+" list matches
+set wildmode=list:full
+
 set wildignore=.svn,CVS,.git        " ignore verson control files
 set wildignore+=*.o,*.a,*.so        " ignore compiled binaries
 set wildignore+=*.jpg,*.png,*.gif   " ignore images
 set wildignore+=*.pdf               " ignore pdf documents
 set wildignore+=*.pyc,*.pyo         " ignore compiled Python files
+" }}}
 
-set mousehide                       " hides the mouse when typing
-
-set autochdir                       " set current working directory on file enter
-
-set noshowmode                      " not necessary with the status line plugin
-
-set listchars=tab:>-,trail:.,extends:#
 
 set matchpairs+=<:>                 " match angle brackets
 
-set encoding=utf8
-set fillchars=vert:│
+" sets the character encoding used inside of vim itself. does not change how
+" files are written to disk.
+set encoding=utf-8
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-" In many terminal emulators the mouse works just fine, thus enable it.
+" Mouse {{{
+" enable the mouse
 if has('mouse')
   set mouse=a
 endif
 
+" hide the mouse when typing
+set mousehide
+" }}}
+
+" Set Colorscheme {{{
 if &t_Co > 2 || has("gui_running")
-  syntax on                         " turns on syntax highlighting
-  set hlsearch                      " highlights the last searched pattern.
-  set t_Co=256                      " enable 256 color mode
+  " enable syntax highlighting
+  syntax on
+
+  " enable 256-color mode
+  set t_Co=256
+
   try
     colorscheme jellybeans
   catch
     silent! colorscheme delek
   endtry
+
 endif
+" }}}
 
 if has("autocmd")
-  filetype plugin indent on         " Enable file type detection.
-
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
-    " delete existing definitions for this group
-    au!
+    autocmd!
 
     " For all text files set 'textwidth' to 78 characters.
     autocmd FileType text setlocal textwidth=78
@@ -181,8 +233,6 @@ noremap <C-n> :tabnew %<CR>
 
 nnoremap <leader>n :set nu!<CR>
 
-" press escape twice to clear highlight search
-nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
 
 " use omnicomplete by default
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
@@ -253,12 +303,21 @@ onoremap il( :<c-u>normal! F)vi(<cr>
 " instead of a horizontal split.
 cabbrev vhelp vertical help
 
+
+" Status Line settings {{{
+
+" always show the status line
+set laststatus=2
+
+" don't display the current mode in the message line, we moved it to the
+" status line.
+set noshowmode
+
 " don't show the readonly marker in help files, it's pointless.
 function! LightlineReadonly()
   return &readonly && &filetype !=# 'help' ? 'RO' : ''
 endfunction
 
-" status line configuration
 let g:lightline = {
 \   'colorscheme': 'jellybeans',
 \   'active': {
@@ -277,3 +336,13 @@ let g:lightline = {
 \     'llreadonly': 'LightlineReadonly'
 \   }
 \ }
+
+" }}}
+
+" use explicit folds like this one when editing vimscript {{{
+augroup filetype_vim
+  autocmd!
+  autocmd FileType vim setlocal foldlevelstart=0
+  autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
