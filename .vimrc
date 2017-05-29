@@ -26,8 +26,7 @@ call vundle#begin()
     Plugin 'airblade/vim-rooter'
     Plugin 'airblade/vim-gitgutter'
     Plugin 'ctrlpvim/ctrlp.vim'
-    Plugin 'vim-airline/vim-airline'
-    Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'itchyny/lightline.vim'
     Plugin 'heavenshell/vim-jsdoc'
 
     " Past plugins
@@ -81,9 +80,16 @@ set wildignore+=*.pyc,*.pyo         " ignore compiled Python files
 
 set mousehide                       " hides the mouse when typing
 
+set autochdir                       " set current working directory on file enter
+
+set noshowmode                      " not necessary with the status line plugin
+
 set listchars=tab:>-,trail:.,extends:#
 
 set matchpairs+=<:>                 " match angle brackets
+
+set encoding=utf8
+set fillchars=vert:│
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -138,7 +144,7 @@ if has("autocmd")
 
     " causes VIM to enter the directory of the file being edited to simplify
     " finding related files.
-    autocmd BufEnter * silent! lcd %:p:h
+    " autocmd BufEnter * silent! lcd %:p:h
 
     autocmd FileType go :iabbrev iff if {<cr>}<up><right>
     autocmd FileType javascript :iabbrev iff if
@@ -195,9 +201,9 @@ noremap <buffer> <silent> $ g$
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_user_command = [
-      \'.git',
-      \'cd %s && git ls-files -co --exclude-standard'
-      \]
+      \ '.git',
+      \ 'cd %s && git ls-files -co --exclude-standard'
+      \ ]
 
 " open up directories with a single click instead of needing to double-click
 let g:NERDTreeMouseMode = 2
@@ -219,6 +225,9 @@ let g:rooter_targets = '/'
 " allows you to sudo write the file you're currently editing without closing
 " (and thus losing) your changes.
 cnoremap w!! w !sudo tee % >/dev/null
+
+" prevents editing a file named "~", which I literally never want.
+cabbrev ~ $HOME
 
 " leader ev to edit your vim rc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -243,3 +252,28 @@ onoremap il( :<c-u>normal! F)vi(<cr>
 " command mode abbreviation :vhelp to open help text in a vertical split
 " instead of a horizontal split.
 cabbrev vhelp vertical help
+
+" don't show the readonly marker in help files, it's pointless.
+function! LightlineReadonly()
+  return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
+
+" status line configuration
+let g:lightline = {
+\   'colorscheme': 'jellybeans',
+\   'active': {
+\     'left': [
+\       ['mode', 'paste'],
+\       ['gitbranch'],
+\       ['llreadonly', 'filename', 'modified']
+\     ],
+\     'right': [
+\       ['lineinfo'],
+\       ['filetype']
+\     ]
+\   },
+\   'component_function': {
+\     'gitbranch': 'fugitive#head',
+\     'llreadonly': 'LightlineReadonly'
+\   }
+\ }

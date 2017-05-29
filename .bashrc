@@ -51,3 +51,4 @@ if [ -f "$HOME/.localrc" ]; then
 fi
 
 alias randompass="python -c \"import string, random; print ''.join(random.sample(string.letters+string.digits, 8))\""
+alias dotfiles="$HOME/.dotfiles/install.sh"
