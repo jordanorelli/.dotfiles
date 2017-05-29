@@ -10,9 +10,7 @@ include=(
     .bashrc
     .screenrc
     .tmux.conf
-    .vim/ftplugin/javascript.vim
-    .vim/ftplugin/ruby.vim
-    .vim/ftplugin/vim.vim
+    .vim/ftplugin/*.vim
     .vimrc
 )
 
