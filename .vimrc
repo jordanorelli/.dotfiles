@@ -21,7 +21,6 @@ call vundle#begin()
     Plugin 'Align'
     Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
     Plugin 'endel/flashdevelop.vim'
-    Plugin 'airblade/vim-rooter'
     Plugin 'airblade/vim-gitgutter'
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'itchyny/lightline.vim'
@@ -90,29 +89,6 @@ set nowritebackup
 set noswapfile
 " }}}
 
-set history=50                      " keep 50 lines of command line history
-
-" show commands as you type them
-set showcmd
-
-" wrap long lines
-set wrap
-
-" force line wrapping to only happen at word boundaries
-set linebreak
-
-set updatetime=750                  " wait 750ms after typing for updates
-
-set autochdir                       " set current working directory on file enter
-
-" no beeping {{{
-" use visual bell instead of beeping
-set visualbell
-
-" you know what, just disable the error bells entirely
-set noerrorbells
-"}}}
-
 " Wild Menu {{{
 
 " enabled the wild menu.
@@ -128,17 +104,6 @@ set wildignore+=*.pdf               " ignore pdf documents
 set wildignore+=*.pyc,*.pyo         " ignore compiled Python files
 " }}}
 
-
-set matchpairs+=<:>                 " match angle brackets
-
-" sets the character encoding used inside of vim itself. does not change how
-" files are written to disk.
-set encoding=utf-8
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
-
 " Mouse {{{
 " enable the mouse
 if has('mouse')
@@ -147,6 +112,9 @@ endif
 
 " hide the mouse when typing
 set mousehide
+
+" open up directories with a single click instead of needing to double-click
+let g:NERDTreeMouseMode = 2
 " }}}
 
 " Set Colorscheme {{{
@@ -166,16 +134,19 @@ if &t_Co > 2 || has("gui_running")
 endif
 " }}}
 
+" Autocmd Hooks {{{
 if has("autocmd")
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
     autocmd!
 
-    " For all text files set 'textwidth' to 78 characters.
-    autocmd FileType text setlocal textwidth=78
+    autocmd BufNewFile,BufRead *.txt set filetype=text
 
     " on some machines md files are thought to be modula2
     autocmd BufNewFile,BufRead *.md set filetype=markdown
+
+    " add Coloring for ChucK source
+    autocmd BufNewFile,BufRead *.ck set filetype=ck
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -203,108 +174,29 @@ if has("autocmd")
     autocmd FileType javascript :iabbrev fun function
 
     " add proper coloring for my .localrc file
-    au BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
+    autocmd BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
 
-    " add Coloring for ChucK source
-    au! BufNewFile,BufRead *.ck setf ck
   augroup END
 else
 
-endif " has("autocmd")
+endif
+" }}}
+
+" Character Encoding {{{
+" sets the character encoding used inside of vim itself. does not change how
+" files are written to disk.
+set encoding=utf-8
 
 if has("multi_byte")
-    if &termencoding == ""
-        let &termencoding = &encoding
-    endif
+  " termencoding specifies what character encoding the keyboard produces and
+  " the display will understand
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
 endif
+" }}}
 
-" Shortcut to show invisible characters
-nnoremap <leader>l :set list!<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" tab navigation helpers
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ctrl-k to go to the next tab
-noremap <C-k> :tabn<CR>
-" ctrl-j to go to the previous tab
-noremap <C-j> :tabp<CR>
-" ctrl-n to open a new tab with the current file
-noremap <C-n> :tabnew %<CR>
-
-nnoremap <leader>n :set nu!<CR>
-
-
-" use omnicomplete by default
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-" close doc window after finishing an autocomplete
-let g:SuperTabClosePreviewOnPopupClose = 1
-
-" supress go fmt errors on file write
-let g:go_fmt_fail_silently = 1
-
-" move by visual lines when mapping instead of physical lines
-noremap <buffer> <silent> k gk
-noremap <buffer> <silent> j gj
-noremap <buffer> <silent> 0 g0
-noremap <buffer> <silent> $ g$
-
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_user_command = [
-      \ '.git',
-      \ 'cd %s && git ls-files -co --exclude-standard'
-      \ ]
-
-" open up directories with a single click instead of needing to double-click
-let g:NERDTreeMouseMode = 2
-
-" fix windows arrows. This gets rid of the pretty arrows on other systems,
-" will have to restore that properly. The default switching behavior is broken
-" inside of msys2.
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeDirArrowCollapsible = '-'
-
-" enable dir tree arrows
-let g:NERDTreeDirArrows = 1
-
-" By default all files and directories trigger vim-rooter. Setting the targets
-" causes it to only trigger on directories.
-let g:rooter_targets = '/'
-
-" new command mode command: w!!
-" allows you to sudo write the file you're currently editing without closing
-" (and thus losing) your changes.
-cnoremap w!! w !sudo tee % >/dev/null
-
-" prevents editing a file named "~", which I literally never want.
-cabbrev ~ $HOME
-
-" leader ev to edit your vim rc
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-
-nnoremap <leader>sv :source $MYVIMRC<cr>
-
-iabbrev @@ @jordanorelli
-
-noremap <Leader>ci NERDComInvertComment
-
-let g:NERDDefaultAlign='left'
-let g:NERDSpaceDelims=1
-
-" new text object: "next paren". means the next open paren on the current
-" line.
-onoremap in( :<c-u>normal! f(ci(<cr>
-
-" new text object: "last paren". means the previous open paren on the current
-" line. (using p would shadow the paragraph object)
-onoremap il( :<c-u>normal! F)vi(<cr>
-
-" command mode abbreviation :vhelp to open help text in a vertical split
-" instead of a horizontal split.
-cabbrev vhelp vertical help
-
-
-" Status Line settings {{{
+" Status Line {{{
 
 " always show the status line
 set laststatus=2
@@ -339,10 +231,132 @@ let g:lightline = {
 
 " }}}
 
-" use explicit folds like this one when editing vimscript {{{
-augroup filetype_vim
-  autocmd!
-  autocmd FileType vim setlocal foldlevelstart=0
-  autocmd FileType vim setlocal foldmethod=marker
-augroup END
+" Normal|Visual|Operator-Pending Mode {{{
+" ctrl-k to go to the next tab
+noremap <C-k> :tabnext<CR>
+
+" ctrl-j to go to the previous tab
+noremap <C-j> :tabprevious<CR>
+
+" ctrl-n to open a new tab with the current file
+noremap <C-n> :tabnew %<CR>
+
+" move by visual lines when moving instead of physical lines
+noremap <buffer> <silent> k gk
+noremap <buffer> <silent> j gj
+noremap <buffer> <silent> 0 g0
+noremap <buffer> <silent> $ g$
+" }}}
+
+" Normal Mode {{{
+" toggle line numbering with <leader>n
+nnoremap <leader>n :set number!<CR>
+
+" Shortcut to show invisible characters
+nnoremap <leader>l :set list!<CR>
+
+" leader ev to edit your vimrc
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+" leader sv to source your vimrc
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" leader ci inverts comment states on a line by line basis
+noremap <Leader>ci NERDComInvertComment
+"}}}
+
+" Insert Mode {{{
+" Ctrl-U deletes from the current position to the start of the line.
+inoremap <C-U> <C-G>u<C-U>
+
+iabbrev @@ @jordanorelli
+" }}}
+
+" Command Mode {{{
+" new command mode command: w!!
+" allows you to sudo write the file you're currently editing without closing
+" (and thus losing) your changes.
+cnoremap w!! w !sudo tee % >/dev/null
+
+" command mode abbreviation :vhelp to open help text in a vertical split
+" instead of a horizontal split.
+cabbrev vhelp vertical help
+
+" prevents editing a file named "~", which I literally never want.
+cabbrev ~ $HOME
+"}}}
+
+" Operator-Pending Mode {{{
+" new text object: "next paren". means the next open paren on the current
+" line.
+onoremap in( :<c-u>normal! f(ci(<cr>
+
+" new text object: "last paren". means the previous open paren on the current
+" line. (using p would shadow the paragraph object)
+onoremap il( :<c-u>normal! F)vi(<cr>
+" }}}
+
+" Supertab {{{
+" use omnicomplete by default
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+
+" close doc window after finishing an autocomplete
+let g:SuperTabClosePreviewOnPopupClose = 1
+" }}}
+
+" CtrlP {{{
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_user_command = [
+      \ '.git',
+      \ 'cd %s && git ls-files -co --exclude-standard'
+      \ ]
+" }}}
+
+" NERDTree {{{
+" fix windows arrows. This gets rid of the pretty arrows on other systems,
+" will have to restore that properly. The default switching behavior is broken
+" inside of msys2.
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+
+" enable dir tree arrows
+let g:NERDTreeDirArrows = 1
+" }}}
+
+" Commenting {{{
+" left-align comment markers by default
+let g:NERDDefaultAlign='left'
+" insert a space after comment markers
+let g:NERDSpaceDelims=1
+" }}}
+
+" Misc {{{
+" keep 50 lines of command line history
+set history=50
+
+" show commands as you type them (mostly for leader-based stuff)
+set showcmd
+
+" wrap long lines
+set wrap
+
+" force line wrapping to only happen at word boundaries
+set linebreak
+
+" wait 400ms after typing for updates (default is 4000)
+set updatetime=400
+
+" set current working directory on file enter
+set autochdir
+
+" match angle brackets
+set matchpairs+=<:>
+
+" use visual bell instead of beeping
+set visualbell
+
+" you know what, just disable the error bells entirely
+set noerrorbells
+
 " }}}
