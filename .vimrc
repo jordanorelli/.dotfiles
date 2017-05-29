@@ -37,11 +37,25 @@ call vundle#end()            " required
 filetype plugin indent on
 " ---------------------------------------------------------------------------}}}
 
+" Character Encoding --------------------------------------------------------{{{
+" sets the character encoding used inside of vim itself. does not change how
+" files are written to disk.
+set encoding=utf-8
+
+if has("multi_byte")
+  " termencoding specifies what character encoding the keyboard produces and
+  " the display will understand
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+endif
+" ---------------------------------------------------------------------------}}}
+
 " Whitespace ----------------------------------------------------------------{{{
 " allow backspacing over line breaks
 set backspace=indent,eol,start
 
-" copy indent form current line when starting a new line
+" copy indent from current line when starting a new line
 set autoindent
 
 " automatically add an indent after block-opening symbols like {
@@ -62,7 +76,12 @@ set expandtab
 set smarttab
 
 " set whitespace characters
-set listchars=tab:>-,trail:.,extends:#
+if has("multi_byte")
+  set listchars=tab:▸\ ,trail:·,precedes:←,extends:→
+  let &showbreak='↪ '
+else
+  set listchars=tab:>-,trail:.,precedes:#,extends:#
+endif
 " ---------------------------------------------------------------------------}}}
 
 " Search --------------------------------------------------------------------{{{
@@ -177,20 +196,6 @@ if has("autocmd")
   augroup END
 else
 
-endif
-" ---------------------------------------------------------------------------}}}
-
-" Character Encoding --------------------------------------------------------{{{
-" sets the character encoding used inside of vim itself. does not change how
-" files are written to disk.
-set encoding=utf-8
-
-if has("multi_byte")
-  " termencoding specifies what character encoding the keyboard produces and
-  " the display will understand
-  if &termencoding == ""
-    let &termencoding = &encoding
-  endif
 endif
 " ---------------------------------------------------------------------------}}}
 
@@ -311,11 +316,13 @@ let g:ctrlp_user_command = [
 " ---------------------------------------------------------------------------}}}
 
 " NERDTree ------------------------------------------------------------------{{{
-" fix windows arrows. This gets rid of the pretty arrows on other systems,
-" will have to restore that properly. The default switching behavior is broken
-" inside of msys2.
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeDirArrowCollapsible = '-'
+if has("multi_byte")
+  let g:NERDTreeDirArrowExpandable = '▸'
+  let g:NERDTreeDirArrowCollapsible = '▾'
+else
+  let g:NERDTreeDirArrowExpandable = '+'
+  let g:NERDTreeDirArrowCollapsible = '-'
+endif
 
 " enable dir tree arrows
 let g:NERDTreeDirArrows = 1

@@ -5,12 +5,15 @@ base_dir="$home/.dotfiles"
 backup_dir="$home/.dotfiles/backup"
 vim_plugins_dir="$home/.vim/bundle"
 vundle_dir="$vim_plugins_dir/Vundle.vim"
+
+# don't include all of .vim, it winds up re-downloading plugins if you do it
+# that way.
 include=(
     .bash_profile
     .bashrc
     .screenrc
     .tmux.conf
-    .vim/ftplugin/*.vim
+    .vim/ftplugin
     .vimrc
 )
 
