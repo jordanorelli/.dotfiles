@@ -134,7 +134,7 @@ set mousehide
 let g:NERDTreeMouseMode = 2
 " ---------------------------------------------------------------------------}}}
 
-" Set Colorscheme -----------------------------------------------------------{{{
+" Colorscheme ---------------------------------------------------------------{{{
 if &t_Co > 2 || has("gui_running")
   " enable syntax highlighting
   syntax on
