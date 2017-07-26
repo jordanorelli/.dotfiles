@@ -45,6 +45,7 @@ Darwin)
 esac
 
 alias tree="tree -C -I vendor"
+alias ls="ls --color=auto"
 
 if [ -f "$HOME/.localrc" ]; then
     source "$HOME/.localrc"
