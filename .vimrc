@@ -14,6 +14,7 @@ call vundle#begin()
     Plugin 'slim-template/vim-slim'
     Plugin 'kchmck/vim-coffee-script'
     Plugin 'fatih/vim-go'
+    Plugin 'fatih/vim-hclfmt'
     Plugin 'nanotech/jellybeans.vim'
     Plugin 'ervandew/supertab'
     Plugin 'scrooloose/nerdcommenter'
@@ -25,6 +26,7 @@ call vundle#begin()
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'itchyny/lightline.vim'
     Plugin 'heavenshell/vim-jsdoc'
+    Plugin 'hashivim/vim-terraform'
 
     " Past plugins
     "
@@ -161,6 +163,8 @@ if has("autocmd")
 
     " on some machines md files are thought to be modula2
     autocmd BufNewFile,BufRead *.md set filetype=markdown
+
+    autocmd BufNewFile,BufRead *.tf set filetype=terraform
 
     " add Coloring for ChucK source
     autocmd BufNewFile,BufRead *.ck set filetype=ck
@@ -326,6 +330,10 @@ endif
 
 " enable dir tree arrows
 let g:NERDTreeDirArrows = 1
+" ---------------------------------------------------------------------------}}}
+
+" terraform -----------------------------------------------------------------{{{
+let g:terraform_align=1
 " ---------------------------------------------------------------------------}}}
 
 " Commenting ----------------------------------------------------------------{{{
