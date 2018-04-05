@@ -27,6 +27,7 @@ call vundle#begin()
     Plugin 'itchyny/lightline.vim'
     Plugin 'heavenshell/vim-jsdoc'
     Plugin 'hashivim/vim-terraform'
+    Plugin 'b4b4r07/vim-hcl'
 
     " Past plugins
     "
@@ -334,6 +335,7 @@ let g:NERDTreeDirArrows = 1
 
 " terraform -----------------------------------------------------------------{{{
 let g:terraform_align=1
+let g:terraform_fmt_on_save=1
 " ---------------------------------------------------------------------------}}}
 
 " Commenting ----------------------------------------------------------------{{{
@@ -341,6 +343,9 @@ let g:terraform_align=1
 let g:NERDDefaultAlign='left'
 " insert a space after comment markers
 let g:NERDSpaceDelims=1
+
+vmap K <Plug>NERDCommenterToggle('n', 'Toggle')<Cr>
+nmap KK <Plug>NERDCommenterToggle('n', 'Toggle')<Cr>
 " ---------------------------------------------------------------------------}}}
 
 " Misc ----------------------------------------------------------------------{{{
