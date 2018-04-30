@@ -28,6 +28,7 @@ call vundle#begin()
     Plugin 'heavenshell/vim-jsdoc'
     Plugin 'hashivim/vim-terraform'
     Plugin 'b4b4r07/vim-hcl'
+    Plugin 'Glench/Vim-Jinja2-Syntax'
 
     " Past plugins
     "
