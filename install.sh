@@ -13,6 +13,7 @@ include=(
     .bashrc
     .screenrc
     .tmux.conf
+    .vim/pack
     .vim/ftplugin
     .vimrc
 )
