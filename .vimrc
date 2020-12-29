@@ -7,6 +7,8 @@ call vundle#begin()
     " let Vundle manage Vundle, required
     Plugin 'VundleVim/Vundle.vim'
 
+    " Plugin 'ycm-core/YouCompleteMe'
+    Plugin 'neoclide/coc.nvim'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-surround'
     Plugin 'tpope/vim-rails'
@@ -22,7 +24,6 @@ call vundle#begin()
     Plugin 'Align'
     Plugin 'tomtom/tlib_vim' " dependency of flashdevelop
     Plugin 'endel/flashdevelop.vim'
-    " Plugin 'airblade/vim-gitgutter'
     Plugin 'ctrlpvim/ctrlp.vim'
     Plugin 'itchyny/lightline.vim'
     Plugin 'heavenshell/vim-jsdoc'
@@ -35,6 +36,9 @@ call vundle#begin()
     " Seems to break NERDTree. I dunno why. Kinda problematic since it's
     " intended to improve NERDTree.
     " Plugin 'Xuyuanp/nerdtree-git-plugin'
+    "
+    " I just don't like it any more
+    " Plugin 'airblade/vim-gitgutter'
 call vundle#end()            " required
 
 " enable the filetype plugin
@@ -146,6 +150,22 @@ if &t_Co > 2 || has("gui_running")
   " enable 256-color mode
   set t_Co=256
 
+  " background-color erasing corrections to tell vim to fill the background
+  " from our colorscheme instead of from the terminal default
+  if (&term =~ '^xterm')
+    set t_ut= | set ttyscroll=1
+    " let &t_ZH="\e[3m"
+    " let &t_ZR="\e[23m"
+
+    " set t_ZH=[3m
+    " set t_ZR=[23m
+  endif
+
+  " this should not do anything but it does.
+  set termguicolors
+
+  let g:jellybeans_use_term_italics = 1
+
   try
     colorscheme jellybeans
   catch
@@ -153,6 +173,8 @@ if &t_Co > 2 || has("gui_running")
   endtry
 
 endif
+
+
 " ---------------------------------------------------------------------------}}}
 
 " Autocmd Hooks -------------------------------------------------------------{{{
@@ -161,6 +183,7 @@ if has("autocmd")
   augroup vimrcEx
     autocmd!
 
+    autocmd BufNewFile,BufRead *.zig set filetype=zig
     autocmd BufNewFile,BufRead *.txt set filetype=text
 
     " on some machines md files are thought to be modula2
@@ -195,10 +218,6 @@ if has("autocmd")
     autocmd FileType go :iabbrev iff if {<cr>}<up><right>
     autocmd FileType javascript :iabbrev iff if
     autocmd FileType javascript :iabbrev fun function
-
-    " add proper coloring for my .localrc file
-    autocmd BufNewFile,BufRead .localrc call SetFileTypeSH("bash")
-
   augroup END
 else
 
@@ -254,6 +273,7 @@ noremap <buffer> <silent> k gk
 noremap <buffer> <silent> j gj
 noremap <buffer> <silent> 0 g0
 noremap <buffer> <silent> $ g$
+
 " ---------------------------------------------------------------------------}}}
 
 " Normal Mode ---------------------------------------------------------------{{{
@@ -306,10 +326,23 @@ onoremap il( :<c-u>normal! F)vi(<cr>
 
 " Supertab ------------------------------------------------------------------{{{
 " use omnicomplete by default
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+" let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 " close doc window after finishing an autocomplete
-let g:SuperTabClosePreviewOnPopupClose = 1
+" let g:SuperTabClosePreviewOnPopupClose = 1
+" ---------------------------------------------------------------------------}}}
+
+" YouCompleteMe -------------------------------------------------------------{{{
+let g:ycm_keep_logfiles = 1
+let g:ycm_log_level = 'debug'
+let g:ycm_language_server =
+      \ [
+      \   {
+      \     'name': 'zig',
+      \     'cmdline': [ 'zls', '--debug-log' ],
+      \     'filetypes': [ 'zig' ],
+      \   }
+      \ ]
 " ---------------------------------------------------------------------------}}}
 
 " CtrlP ---------------------------------------------------------------------{{{
