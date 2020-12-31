@@ -70,6 +70,12 @@ then
     source <(kitty + complete setup bash)
 fi
 
+# sometimes I just put binary files in a bin dir in my home directory. Is this
+# gross? I dunno. What are you, some kind of cop?
+if [ -d "$HOME/bin" ]; then
+    export PATH=$PATH:$HOME/bin
+fi
+
 # add the Go bindir to the path if we have the standard Go install dir
 if [ -d /usr/local/go ]; then
     export PATH=$PATH:/usr/local/go/bin
