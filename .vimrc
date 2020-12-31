@@ -3,12 +3,12 @@ set nocompatible
 " Plugins -------------------------------------------------------------------{{{
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+
 call vundle#begin()
     " let Vundle manage Vundle, required
     Plugin 'VundleVim/Vundle.vim'
 
     " Plugin 'ycm-core/YouCompleteMe'
-    Plugin 'neoclide/coc.nvim'
     Plugin 'tpope/vim-fugitive'
     Plugin 'tpope/vim-surround'
     Plugin 'tpope/vim-rails'
@@ -39,6 +39,9 @@ call vundle#begin()
     "
     " I just don't like it any more
     " Plugin 'airblade/vim-gitgutter'
+    "
+    " Still figuring this one out. I think I hate it?
+    " Plugin 'neoclide/coc.nvim'
 call vundle#end()            " required
 
 " enable the filetype plugin
@@ -154,11 +157,6 @@ if &t_Co > 2 || has("gui_running")
   " from our colorscheme instead of from the terminal default
   if (&term =~ '^xterm')
     set t_ut= | set ttyscroll=1
-    " let &t_ZH="\e[3m"
-    " let &t_ZR="\e[23m"
-
-    " set t_ZH=[3m
-    " set t_ZR=[23m
   endif
 
   " this should not do anything but it does.
@@ -171,10 +169,7 @@ if &t_Co > 2 || has("gui_running")
   catch
     silent! colorscheme delek
   endtry
-
 endif
-
-
 " ---------------------------------------------------------------------------}}}
 
 " Autocmd Hooks -------------------------------------------------------------{{{

@@ -21,15 +21,19 @@ shopt -s checkwinsize
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-color|*-256color)
+        color_prompt=yes
+        ;;
+    xterm-kitty)
+        # the kitty docs recommend not changing the TERM value, so, we'll try
+        # that until it breaks.
+        color_prompt=yes
+        ;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
+# uncomment for a colored prompt, if the terminal has the capability
 force_color_prompt=yes
 
-#unset color_prompt force_color_prompt
 export PS1="\[\e[0;32m\]\u@\h[\j] \w: \[\e[m\]"
 
 export EDITOR=vim
@@ -38,6 +42,9 @@ case $( uname -s ) in
 Darwin)
     echo "Using OSX bash settings."
     alias ls="ls -G"
+    ;;
+Linux)
+    # for some reason I find this welcome string more annoying on Linux
     ;;
 *)
     echo "No platform-specific bash settings are enabled."
