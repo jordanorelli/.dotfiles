@@ -51,7 +51,7 @@ Linux)
     ;;
 esac
 
-alias tree="tree -C -I vendor"
+alias tree="tree -C"
 alias ls="ls --color=auto"
 
 if [ -f "$HOME/.localrc" ]; then
@@ -59,4 +59,24 @@ if [ -f "$HOME/.localrc" ]; then
 fi
 
 alias randompass="python -c \"import string, random; print ''.join(random.sample(string.letters+string.digits, 8))\""
-alias dotfiles="$HOME/.dotfiles/install.sh"
+
+if [ -d "$HOME/.dotfiles" ]; then
+    alias dotfiles="$HOME/.dotfiles/install.sh"
+fi
+
+# if kitty is installed, register its completions
+if command -v kitty &> /dev/null
+then
+    source <(kitty + complete setup bash)
+fi
+
+# add the Go bindir to the path if we have the standard Go install dir
+if [ -d /usr/local/go ]; then
+    export PATH=$PATH:/usr/local/go/bin
+fi
+
+# likewise for zig, but zig doesn't have a bin dir for some reason, which is
+# weird.
+if [ -d /usr/local/zig ]; then
+    export PATH=$PATH:/usr/local/zig
+fi
