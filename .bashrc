@@ -80,9 +80,3 @@ fi
 if [ -d /usr/local/go ]; then
     export PATH=$PATH:/usr/local/go/bin
 fi
-
-# likewise for zig, but zig doesn't have a bin dir for some reason, which is
-# weird.
-if [ -d /usr/local/zig ]; then
-    export PATH=$PATH:/usr/local/zig
-fi

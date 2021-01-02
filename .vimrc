@@ -30,6 +30,7 @@ call vundle#begin()
     Plugin 'hashivim/vim-terraform'
     Plugin 'b4b4r07/vim-hcl'
     Plugin 'Glench/Vim-Jinja2-Syntax'
+    Plugin 'calviken/vim-gdscript3'
 
     " Past plugins
     "
@@ -180,6 +181,7 @@ if has("autocmd")
 
     autocmd BufNewFile,BufRead *.zig set filetype=zig
     autocmd BufNewFile,BufRead *.txt set filetype=text
+    autocmd BufNewFile,BufRead *.gd set filetype=gdscript3
 
     " on some machines md files are thought to be modula2
     autocmd BufNewFile,BufRead *.md set filetype=markdown
