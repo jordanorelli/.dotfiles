@@ -78,5 +78,5 @@ fi
 
 # add the Go bindir to the path if we have the standard Go install dir
 if [ -d /usr/local/go ]; then
-    export PATH=$PATH:/usr/local/go/bin
+    export PATH=$PATH:$HOME/go/bin:/usr/local/go/bin
 fi
