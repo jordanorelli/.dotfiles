@@ -46,6 +46,11 @@ Darwin)
 Linux)
     # for some reason I find this welcome string more annoying on Linux
     ;;
+MSYS_NT-10.0-22000)
+    # I don't actually have any MSYS-specific settings yet but probably will at
+    # some point
+    echo "Using MSYS bash settings."
+    ;;
 *)
     echo "No platform-specific bash settings are enabled."
     ;;
@@ -55,6 +60,7 @@ alias tree="tree -C"
 alias ls="ls --color=auto"
 
 if [ -f "$HOME/.localrc" ]; then
+    echo "Using machine-specific settings from "$HOME/.localrc""
     source "$HOME/.localrc"
 fi
 
