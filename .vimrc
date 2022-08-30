@@ -31,6 +31,8 @@ call vundle#begin()
     Plugin 'b4b4r07/vim-hcl'
     Plugin 'Glench/Vim-Jinja2-Syntax'
     Plugin 'calviken/vim-gdscript3'
+    Plugin 'prabirshrestha/vim-lsp'
+    Plugin 'mattn/vim-lsp-settings'
 
     " Past plugins
     "
