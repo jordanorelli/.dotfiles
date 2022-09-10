@@ -86,3 +86,7 @@ fi
 if [ -d /usr/local/go ]; then
     export PATH=$PATH:$HOME/go/bin:/usr/local/go/bin
 fi
+
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi

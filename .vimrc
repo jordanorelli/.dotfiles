@@ -30,7 +30,6 @@ call vundle#begin()
     Plugin 'hashivim/vim-terraform'
     Plugin 'b4b4r07/vim-hcl'
     Plugin 'Glench/Vim-Jinja2-Syntax'
-    Plugin 'calviken/vim-gdscript3'
     Plugin 'prabirshrestha/vim-lsp'
     Plugin 'mattn/vim-lsp-settings'
 
@@ -45,6 +44,9 @@ call vundle#begin()
     "
     " Still figuring this one out. I think I hate it?
     " Plugin 'neoclide/coc.nvim'
+    "
+    " this repo is gone
+    " Plugin 'calviken/vim-gdscript3'
 call vundle#end()            " required
 
 " enable the filetype plugin
