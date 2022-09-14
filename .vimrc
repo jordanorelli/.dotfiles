@@ -148,6 +148,9 @@ set mousehide
 
 " open up directories with a single click instead of needing to double-click
 let g:NERDTreeMouseMode = 2
+
+" this fixes the WSL mouse not working beyond column 95 but I have no idea why
+set ttymouse=sgr
 " ---------------------------------------------------------------------------}}}
 
 " Colorscheme ---------------------------------------------------------------{{{
@@ -267,7 +270,10 @@ noremap <C-k> :tabnext<CR>
 noremap <C-j> :tabprevious<CR>
 
 " ctrl-n to open a new tab with the current file
-noremap <C-n> :tabnew %<CR>
+noremap <C-n><C-n> :tabnew %<CR>
+
+noremap <C-n><o> :tab term<CR>
+noremap <C-n><C-o> :tab term<CR>
 
 " move by visual lines when moving instead of physical lines
 noremap <buffer> <silent> k gk
@@ -314,6 +320,24 @@ cabbrev vhelp vertical help
 " prevents editing a file named "~", which I literally never want.
 cabbrev ~ $HOME
 " ---------------------------------------------------------------------------}}}
+
+" Terminal Mode -------------------------------------------------------------{{{
+
+" ctrl-k to go to the next tab
+tnoremap <C-k> <C-w>:tabnext<CR>
+
+" ctrl-j to go to the previous tab
+tnoremap <C-j> <C-w>:tabprevious<CR>
+
+" ctrl-n-n to create a new tab with an empty buffer
+tnoremap <C-n><n> <C-w>:tabnew<CR>
+tnoremap <C-n><C-n> <C-w>:tabnew<CR>
+
+" ctrl-shift-n creates a new tab with a terminal
+tnoremap <C-n><o> <C-w>:tab term<CR>
+tnoremap <C-n><C-o> <C-w>:tab term<CR>
+" ---------------------------------------------------------------------------}}}
+
 
 " Operator-Pending Mode -----------------------------------------------------{{{
 " new text object: "next paren". means the next open paren on the current
