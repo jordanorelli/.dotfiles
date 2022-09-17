@@ -175,12 +175,21 @@ if &t_Co > 2 || has("gui_running")
   set termguicolors
 
   let g:jellybeans_use_term_italics = 1
+  let g:jellybeans_overrides = {
+  \    'background': { 'ctermbg': 'none', '256ctermbg': 'none' },
+  \}
+  
+  if has('termguicolors') && &termguicolors
+      let g:jellybeans_overrides['background']['guibg'] = 'none'
+  endif
 
   try
     colorscheme jellybeans
   catch
     silent! colorscheme delek
   endtry
+
+
 endif
 " ---------------------------------------------------------------------------}}}
 
@@ -361,8 +370,8 @@ let g:terminal_ansi_colors = [
   \ '#ffffff'
   \ ]
 
-" highlight Terminal guibg='#3b3b3b'
-" highlight Terminal guifg='#adadad'
+highlight Terminal guibg='#0c0c0c'
+highlight Terminal guifg='#cccccc'
 " ---------------------------------------------------------------------------}}}
 
 " Operator-Pending Mode -----------------------------------------------------{{{

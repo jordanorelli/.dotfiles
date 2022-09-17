@@ -16,6 +16,7 @@ include=(
     .vim/pack
     .vim/ftplugin
     .vimrc
+    .config/htop/htoprc
 )
 
 if [[ -d "$backup_dir" ]] ; then
