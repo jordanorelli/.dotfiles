@@ -341,8 +341,29 @@ tnoremap <C-n><C-n> <C-w>:tabnew<CR>
 " ctrl-shift-n creates a new tab with a terminal
 tnoremap <C-n><o> <C-w>:tab term<CR>
 tnoremap <C-n><C-o> <C-w>:tab term<CR>
-" ---------------------------------------------------------------------------}}}
 
+let g:terminal_ansi_colors = [
+  \ '#929292',
+  \ '#e27373',
+  \ '#94b979',
+  \ '#ffba7b',
+  \ '#97bedc',
+  \ '#e1c0fa',
+  \ '#00988e',
+  \ '#dedede',
+  \ '#bdbdbd',
+  \ '#ffa1a1',
+  \ '#bddeab',
+  \ '#ffdca0',
+  \ '#b1d8f6',
+  \ '#fbdaff',
+  \ '#1ab2a8',
+  \ '#ffffff'
+  \ ]
+
+" highlight Terminal guibg='#3b3b3b'
+" highlight Terminal guifg='#adadad'
+" ---------------------------------------------------------------------------}}}
 
 " Operator-Pending Mode -----------------------------------------------------{{{
 " new text object: "next paren". means the next open paren on the current
