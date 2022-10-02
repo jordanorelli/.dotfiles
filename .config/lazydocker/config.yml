@@ -1,0 +1,12 @@
+logs:
+  timestamps: no
+
+gui:
+  returnImmediately: yes
+
+customCommands:
+  containers:
+    - name: scylla shell
+      attach: true
+      command: 'docker exec -it {{ .Container.ID }} cqlsh'
+      serviceNames: []

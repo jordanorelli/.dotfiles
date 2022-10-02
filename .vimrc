@@ -31,6 +31,7 @@ call vundle#begin()
     Plugin 'b4b4r07/vim-hcl'          " hcl syntax stuff?
     Plugin 'Glench/Vim-Jinja2-Syntax' " jinja2 syntax stuff
     Plugin 'rust-lang/rust.vim'       " bare minimum rust syntax stuff
+    Plugin 'elubow/cql-vim'
 
     " Past plugins
     "
@@ -300,6 +301,7 @@ noremap <buffer> <silent> $ g$
 " Normal Mode ---------------------------------------------------------------{{{
 " toggle line numbering with <leader>n
 nnoremap <leader>n :set number!<CR>
+set number
 
 " Shortcut to show invisible characters
 nnoremap <leader>l :set list!<CR>
@@ -484,4 +486,21 @@ set visualbell
 
 " you know what, just disable the error bells entirely
 set noerrorbells
+
+" highlight the cursor line only in the current window
+augroup CursorLine
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
+augroup END
+
+" integrate the wsl clipboard for yanking to the system clipboard
+let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+if executable(s:clip)
+    augroup WSLYank
+        autocmd!
+        autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+    augroup END
+endif
 " ---------------------------------------------------------------------------}}}
+

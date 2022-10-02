@@ -17,6 +17,7 @@ include=(
     .vim/ftplugin
     .vimrc
     .config/htop/htoprc
+    .config/lazydocker/config.yml
 )
 
 if [[ -d "$backup_dir" ]] ; then
