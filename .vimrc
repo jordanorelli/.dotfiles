@@ -9,10 +9,12 @@ call vundle#begin()
     Plugin 'VundleVim/Vundle.vim'
 
     Plugin 'dense-analysis/ale'       " asynchronous linting engine
-    Plugin 'tpope/vim-fugitive'       " git integration that I never use
+    Plugin 'tpope/vim-fugitive'       " integration with the git cli
     Plugin 'tpope/vim-surround'       " edits surrounding quotes and parens and the like
     Plugin 'tpope/vim-rails'          " rails project management stuff
     Plugin 'tpope/vim-repeat'         " fixes the . key for ...something
+    " Plugin 'airblade/vim-gitgutter'   " in-file git integration
+    Plugin 'mhinz/vim-signify'
     Plugin 'slim-template/vim-slim'   " what in the 2008 is this
     Plugin 'kchmck/vim-coffee-script' " lol coffee script
     Plugin 'fatih/vim-go'             " all-in-one Go tools
@@ -38,9 +40,6 @@ call vundle#begin()
     " Seems to break NERDTree. I dunno why. Kinda problematic since it's
     " intended to improve NERDTree.
     " Plugin 'Xuyuanp/nerdtree-git-plugin'
-    "
-    " I just don't like it any more
-    " Plugin 'airblade/vim-gitgutter'
     "
     " Still figuring this one out. I think I hate it?
     " Plugin 'neoclide/coc.nvim'
@@ -270,7 +269,7 @@ let g:lightline = {
 \     ]
 \   },
 \   'component_function': {
-\     'gitbranch': 'fugitive#head',
+\     'gitbranch': 'FugitiveHead',
 \     'llreadonly': 'LightlineReadonly'
 \   }
 \ }
@@ -306,14 +305,40 @@ set number
 " Shortcut to show invisible characters
 nnoremap <leader>l :set list!<CR>
 
-" leader ev to edit your vimrc
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" leader pe (prefs edit) to edit your vimrc
+nnoremap <leader>pe :vsplit $MYVIMRC<cr>
 
-" leader sv to source your vimrc
-nnoremap <leader>sv :source $MYVIMRC<cr>
+" leader ps (prefs source) to source your vimrc
+nnoremap <leader>ps :source $MYVIMRC<cr>
 
 " leader ci inverts comment states on a line by line basis
 noremap <Leader>ci NERDComInvertComment
+
+" ---------------------------------------------------------------------------}}}
+
+" Git -----------------------------------------------------------------------{{{
+let g:signify_disable_by_default = 1
+
+" toggle the signify sign column on and off
+nmap <leader>vs :SignifyToggle<CR>
+
+" toggle line-level highlighting in signify
+nmap <leader>vl :SignifyToggleHighlight<CR>
+
+" diff the current file with signify
+nmap <leader>vd :SignifyDiff<CR>
+
+nmap <leader>vc :Git commit<CR>
+nmap <leader>vp :Git push<CR>
+nmap <leader>va :Git add %<CR>
+
+nmap <leader>vj <plug>(signify-next-hunk)
+nmap <leader>vk <plug>(signify-prev-hunk)
+
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+omap ac <plug>(signify-motion-outer-pending)
+xmap ac <plug>(signify-motion-outer-visual)
 " ---------------------------------------------------------------------------}}}
 
 " Insert Mode ---------------------------------------------------------------{{{
@@ -472,8 +497,8 @@ set wrap
 " force line wrapping to only happen at word boundaries
 set linebreak
 
-" wait 400ms after typing for updates (default is 4000)
-set updatetime=400
+" wait 200ms after typing for updates (default is 4000)
+set updatetime=200
 
 " set current working directory on file enter
 set autochdir
