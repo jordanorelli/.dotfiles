@@ -153,8 +153,11 @@ set mousehide
 " open up directories with a single click instead of needing to double-click
 let g:NERDTreeMouseMode = 2
 
-" this fixes the WSL mouse not working beyond column 95 but I have no idea why
-set ttymouse=sgr
+" mouse is always on in nvim anyway
+if !has('nvim')
+    " this fixes the WSL mouse not working beyond column 95 but I have no idea why
+    set ttymouse=sgr
+endif
 " ---------------------------------------------------------------------------}}}
 
 " Colorscheme ---------------------------------------------------------------{{{
@@ -459,6 +462,7 @@ let g:SuperTabClosePreviewOnPopupClose = 1
 let g:ale_linters = {'rust': ['analyzer']}
 let g:ale_fixers = {'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines']}
 let g:rustfmt_autosave = 1
+let g:ale_rust_analyzer_executable = "/home/jorelli/analyzer-spy"
 let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
 let g:ale_completion_enabled = 1
 set completeopt=menu,menuone,preview,noselect,noinsert
