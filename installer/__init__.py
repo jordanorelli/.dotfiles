@@ -105,7 +105,8 @@ class Installer:
         """
         directory containing our preferences repo
         """
-        return pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
+        here = pathlib.Path(os.path.realpath(__file__))
+        return here.parent.parent
 
     @classmethod
     @cached_property
