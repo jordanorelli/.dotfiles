@@ -77,20 +77,10 @@ class Installer:
             target_path = pathlib.Path.home() / name
             self.log.debug("  target: %s", target_path)
             if target_path.exists():
-                self.log.debug("    target path exists")
-                if target_path.is_symlink():
-                    self.log.debug("    is symlink")
-                    if target_path.resolve() == source_path:
-                        self.log.debug("    up to date")
-                    else:
-                        self.log.info("%s -> %s", target_path, source_path)
-                        target_path.symlink_to(source_path)
-                else:
-                    self.log.info("%s -> %s", target_path, source_path)
-                    target_path.symlink_to(source_path)
-            else:
-                self.log.info("%s -> %s", target_path, source_path)
-                target_path.symlink_to(source_path)
+                self.log.debug("    target path exists, will remove")
+                target_path.unlink()
+            self.log.debug("    link: %s -> %s", target_path, source_path)
+            target_path.symlink_to(source_path)
 
         if self.is_wsl:
             target_path = self.windows_home_dir / pathlib.PureWindowsPath(name)
@@ -98,6 +88,7 @@ class Installer:
             if target_path.exists():
                 self.log.debug("    target path exists, will remove")
                 target_path.unlink()
+            self.log.debug("    copy: %s -> %s", source_path, target_path)
             shutil.copy(source_path, target_path)
 
     @cached_property
