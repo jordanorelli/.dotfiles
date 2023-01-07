@@ -2,6 +2,5 @@
 """
 installs preferences
 """
-from installer import Installer
-installer = Installer.from_cli_args()
-installer.run()
+from installer import install
+install()
