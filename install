@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""
+installs preferences
+"""
+from installer import Installer
+installer = Installer.from_cli_args()
+installer.run()

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 home="$HOME"
-base_dir="$home/.dotfiles"
-backup_dir="$home/.dotfiles/backup"
+base_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+backup_dir="$base_dir/backup"
 vim_plugins_dir="$home/.vim/bundle"
 vundle_dir="$vim_plugins_dir/Vundle.vim"
 
@@ -63,7 +63,7 @@ for filename in ${include[@]}; do
     fi
 
     # symlink in the versioned dotfiles.
-    ln -sv "$source_path" "$dest_path"
+    ln -fsv "$source_path" "$dest_path"
     echo "--------------------------------------------------------------------------------"
 done
 
@@ -79,3 +79,7 @@ fi
 
 echo "installing Vim plugins"
 vim +PluginInstall +qall
+
+if uname -a | grep -q WSL; then
+    "$base_dir/wsl/install.sh" -u JordanOrelli
+fi

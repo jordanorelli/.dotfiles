@@ -1,0 +1,15 @@
+{
+    "home_files": [
+        ".bash_profile",
+        ".bashrc",
+        ".screenrc",
+        ".tmux.conf",
+        ".vimrc",
+        ".config/htop/htoprc",
+        ".config/lazydocker/config.yml"
+    ],
+    "home_dirs": [
+        ".vim/pack",
+        ".vim/ftplugin"
+    ]
+}

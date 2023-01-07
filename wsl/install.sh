@@ -19,7 +19,6 @@ do
 done
 
 function main() {
-
     if ! [[ $username ]]; then
         echo "Username is required" 2>&1
         usage
