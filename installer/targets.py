@@ -137,12 +137,16 @@ class WSLHost(Target):
         print(f"is link: {is_link}")
         if target_path.exists():
             print("target path exists")
-            if target_path.is_file():
-                print("removing existing regular file")
-                target_path.unlink()
-            else:
-                print("skip: target path exists and is not a regular file")
-                return
+            if source_path.is_file():
+                if target_path.is_file():
+                    print("removing existing regular file")
+                    target_path.unlink()
+                else:
+                    print("skip: target path exists and is not a regular file")
+                    return
+            elif source_path.is_dir():
+                print("removing existing file tree")
+                shutil.rmtree(target_path)
         else:
             print("target path does not exist")
         print("copying file to target")

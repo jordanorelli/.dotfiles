@@ -1,1 +1,3 @@
-nnoremap <buffer> <C-]> :ALEGoToDefinition<CR>
+if !has('nvim')
+  nnoremap <buffer> <C-]> :ALEGoToDefinition<CR>
+endif
