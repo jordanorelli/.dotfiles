@@ -2,56 +2,57 @@ set nocompatible
 
 " Plugins -------------------------------------------------------------------{{{
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+if !has('nvim')
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
+      " let Vundle manage Vundle, required
+      Plugin 'VundleVim/Vundle.vim'
 
-call vundle#begin()
-    " let Vundle manage Vundle, required
-    Plugin 'VundleVim/Vundle.vim'
+      Plugin 'dense-analysis/ale'       " asynchronous linting engine
+      Plugin 'tpope/vim-fugitive'       " integration with the git cli
+      Plugin 'tpope/vim-surround'       " edits surrounding quotes and parens and the like
+      Plugin 'tpope/vim-rails'          " rails project management stuff
+      Plugin 'tpope/vim-repeat'         " fixes the . key for ...something
+      " Plugin 'airblade/vim-gitgutter'   " in-file git integration
+      Plugin 'mhinz/vim-signify'
+      Plugin 'slim-template/vim-slim'   " what in the 2008 is this
+      Plugin 'kchmck/vim-coffee-script' " lol coffee script
+      Plugin 'fatih/vim-go'             " all-in-one Go tools
+      Plugin 'fatih/vim-hclfmt'         " nicely formats hcl files
+      Plugin 'nanotech/jellybeans.vim'  " the best colorscheme
+      Plugin 'ervandew/supertab'        " makes tab better apparently
+      Plugin 'scrooloose/nerdcommenter' " no idea if I'm even using this
+      Plugin 'scrooloose/nerdtree'      " better file navigation
+      Plugin 'Align'                    " aligns things on demand
+      Plugin 'tomtom/tlib_vim'          " dependency of flashdevelop
+      Plugin 'endel/flashdevelop.vim'   " this is probably old now
+      Plugin 'ctrlpvim/ctrlp.vim'       " don't actually know how to use this honestly
+      Plugin 'itchyny/lightline.vim'    " fancy status line
+      Plugin 'heavenshell/vim-jsdoc'    " js docs?
+      Plugin 'hashivim/vim-terraform'   " hclfmt but for terraform
+      Plugin 'b4b4r07/vim-hcl'          " hcl syntax stuff?
+      Plugin 'Glench/Vim-Jinja2-Syntax' " jinja2 syntax stuff
+      Plugin 'rust-lang/rust.vim'       " bare minimum rust syntax stuff
+      Plugin 'elubow/cql-vim'
 
-    Plugin 'dense-analysis/ale'       " asynchronous linting engine
-    Plugin 'tpope/vim-fugitive'       " integration with the git cli
-    Plugin 'tpope/vim-surround'       " edits surrounding quotes and parens and the like
-    Plugin 'tpope/vim-rails'          " rails project management stuff
-    Plugin 'tpope/vim-repeat'         " fixes the . key for ...something
-    " Plugin 'airblade/vim-gitgutter'   " in-file git integration
-    Plugin 'mhinz/vim-signify'
-    Plugin 'slim-template/vim-slim'   " what in the 2008 is this
-    Plugin 'kchmck/vim-coffee-script' " lol coffee script
-    Plugin 'fatih/vim-go'             " all-in-one Go tools
-    Plugin 'fatih/vim-hclfmt'         " nicely formats hcl files
-    Plugin 'nanotech/jellybeans.vim'  " the best colorscheme
-    Plugin 'ervandew/supertab'        " makes tab better apparently
-    Plugin 'scrooloose/nerdcommenter' " no idea if I'm even using this
-    Plugin 'scrooloose/nerdtree'      " better file navigation
-    Plugin 'Align'                    " aligns things on demand
-    Plugin 'tomtom/tlib_vim'          " dependency of flashdevelop
-    Plugin 'endel/flashdevelop.vim'   " this is probably old now
-    Plugin 'ctrlpvim/ctrlp.vim'       " don't actually know how to use this honestly
-    Plugin 'itchyny/lightline.vim'    " fancy status line
-    Plugin 'heavenshell/vim-jsdoc'    " js docs?
-    Plugin 'hashivim/vim-terraform'   " hclfmt but for terraform
-    Plugin 'b4b4r07/vim-hcl'          " hcl syntax stuff?
-    Plugin 'Glench/Vim-Jinja2-Syntax' " jinja2 syntax stuff
-    Plugin 'rust-lang/rust.vim'       " bare minimum rust syntax stuff
-    Plugin 'elubow/cql-vim'
-
-    " Past plugins
-    "
-    " Seems to break NERDTree. I dunno why. Kinda problematic since it's
-    " intended to improve NERDTree.
-    " Plugin 'Xuyuanp/nerdtree-git-plugin'
-    "
-    " Still figuring this one out. I think I hate it?
-    " Plugin 'neoclide/coc.nvim'
-    "
-    " this repo is gone
-    " Plugin 'calviken/vim-gdscript3'
-    "
-    " I'm trying ALE instead
-    " Plugin 'ycm-core/YouCompleteMe'
-    " Plugin 'prabirshrestha/vim-lsp'
-    " Plugin 'mattn/vim-lsp-settings'
-call vundle#end()            " required
+      " Past plugins
+      "
+      " Seems to break NERDTree. I dunno why. Kinda problematic since it's
+      " intended to improve NERDTree.
+      " Plugin 'Xuyuanp/nerdtree-git-plugin'
+      "
+      " Still figuring this one out. I think I hate it?
+      " Plugin 'neoclide/coc.nvim'
+      "
+      " this repo is gone
+      " Plugin 'calviken/vim-gdscript3'
+      "
+      " I'm trying ALE instead
+      " Plugin 'ycm-core/YouCompleteMe'
+      " Plugin 'prabirshrestha/vim-lsp'
+      " Plugin 'mattn/vim-lsp-settings'
+  call vundle#end()            " required
+endif
 
 " enable the filetype plugin
 filetype plugin indent on
@@ -230,7 +231,9 @@ if has("autocmd")
     autocmd FileType php set omnifunc=phpcomplete#CompletePHP
     autocmd FileType python set omnifunc=pythoncomplete#Complete
     autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-    autocmd FileType rust set omnifunc=ale#completion#OmniFunc
+    if !has('nvim')
+      autocmd FileType rust set omnifunc=ale#completion#OmniFunc
+    endif
 
     " causes VIM to enter the directory of the file being edited to simplify
     " finding related files.
@@ -400,7 +403,9 @@ let g:terminal_ansi_colors = [
   \ '#ffffff'
   \ ]
 
-autocmd TerminalOpen * set nonu
+if !has('nvim')
+  autocmd TerminalOpen * set nonu
+endif
 
 highlight Terminal guibg='#0c0c0c'
 highlight Terminal guifg='#cccccc'
@@ -459,13 +464,15 @@ let g:SuperTabClosePreviewOnPopupClose = 1
 " ---------------------------------------------------------------------------}}}
 
 " ALE -----------------------------------------------------------------------{{{
-let g:ale_linters = {'rust': ['analyzer']}
-let g:ale_fixers = {'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines']}
-let g:rustfmt_autosave = 1
-let g:ale_rust_analyzer_executable = "/home/jorelli/analyzer-spy"
-let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
-let g:ale_completion_enabled = 1
-set completeopt=menu,menuone,preview,noselect,noinsert
+if !has('nvim')
+  let g:ale_linters = {'rust': ['analyzer']}
+  let g:ale_fixers = {'rust': ['rustfmt', 'trim_whitespace', 'remove_trailing_lines']}
+  let g:rustfmt_autosave = 1
+  let g:ale_rust_analyzer_executable = "/home/jorelli/analyzer-spy"
+  let g:ale_rust_cargo_use_clippy = executable('cargo-clippy')
+  let g:ale_completion_enabled = 1
+  set completeopt=menu,menuone,preview,noselect,noinsert
+endif
 " ---------------------------------------------------------------------------}}}
 
 " CtrlP ---------------------------------------------------------------------{{{

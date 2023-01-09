@@ -53,7 +53,7 @@ class Target:
             if target_path.is_symlink():
                 print("target path is symlink")
                 if target_path.resolve() == source_path:
-                    print("symlink is up to date")
+                    print("symlink is up to date\n")
                     return
                 print("removing out of date symlink")
                 target_path.unlink()
@@ -61,7 +61,7 @@ class Target:
                 print("removing existing regular file")
                 target_path.unlink()
             elif target_path.is_dir():
-                print("skip: target path is existing directory")
+                print("skip: target path is existing directory\n")
                 return
             else:
                 print("skip: target path already exists")
@@ -77,6 +77,7 @@ class Target:
                 target_path.unlink()
         print("creating symlink")
         target_path.symlink_to(source_path)
+        print("")
 
 class Linux(Target):
     """
@@ -146,3 +147,4 @@ class WSLHost(Target):
             print("target path does not exist")
         print("copying file to target")
         clone(source_path, target_path)
+        print("")

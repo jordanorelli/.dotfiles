@@ -66,7 +66,7 @@ class Installer:
         print(f"source path: {source_path}")
         print(f"source drive: {source_path.drive}")
         if not source_path.exists():
-            print('skip: no such file')
+            print("skip: no such file\n")
             return
 
         for target in self.targets:
