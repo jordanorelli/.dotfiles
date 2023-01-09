@@ -3,8 +3,10 @@ cli options
 """
 
 import argparse
+import configparser
+import pathlib
 
-from installer import log
+from installer import log, host
 
 class Options:
     """
@@ -24,10 +26,7 @@ class Options:
                 """)
         parser.add_argument('-v', '--verbose', action='store_true')
         parser.add_argument('-q', '--quiet', action='store_true')
-        parser.add_argument('-c', '--config', default='config.ini',
-                help="path to config file",
-                metavar='config.ini',
-                type=argparse.FileType('r', encoding='utf-8'))
+        parser.add_argument('-c', '--config', help="path to config file")
         options = cls()
         parser.parse_args(namespace=options)
 
@@ -64,4 +63,12 @@ class Options:
 
     @config.setter
     def config(self, val):
-        self._config = val
+        if val is None:
+            path = host.dotfiles_root / "config.ini"
+        else:
+            path = pathlib.Path(val)
+
+        with open(path, 'r', encoding='utf-8') as config_file:
+            parser = configparser.ConfigParser()
+            parser.read_file(config_file)
+            self._config = parser

@@ -14,13 +14,7 @@ from functools import cached_property
 from installer import host
 from installer.options import Options
 from installer import log
-
-def install():
-    """
-    runs our install process based on cli arguments
-    """
-    installer = Installer()
-    installer.run()
+from installer import targets
 
 class Installer:
     """
@@ -28,86 +22,75 @@ class Installer:
     """
     def __init__(self):
         self.options = Options.from_cli_args()
-        self.config_path = "include.json"
 
     def run(self):
         """
         runs the install process
         """
-        if home_files := self.config.get('home_files'):
-            for name in home_files:
-                self.install_home_file(name)
+        if host.is_windows and not host.is_admin:
+            print("You are not admin: admin is required on Windows")
+            os.exit(1)
 
-    def install_home_file(self, name):
-        """
-        installs a given file
-        """
-        log.debug("install: %s", name)
-
-        source_path = self.prefs_dir / name
-        log.debug("  source: %s", source_path)
-        if not source_path.exists():
-            log.warning("home file source path %s does not exist", source_path)
-            return
-
-        if not source_path.is_file():
-            log.warning("home file source path %s is not a file", source_path)
-            return
+        print("linking in home files")
+        home = self.options.config['home']
+        home_files = filter(None, home['files'].splitlines())
+        for fname in home_files:
+            print(f"\n{fname}")
+            path = pathlib.Path(fname)
+            self.map_file(path, path)
 
         if host.is_linux:
-            target_path = pathlib.Path.home() / name
-            log.debug("  target: %s", target_path)
-            if target_path.exists():
-                log.debug("    target path exists, will remove")
-                target_path.unlink()
-            log.debug("    link: %s -> %s", target_path, source_path)
-            target_path.symlink_to(source_path)
+            self.map_section('map.posix')
+            self.map_section('map.windows')
 
-        if host.is_wsl:
-            target_path = self.windows_home_dir / pathlib.PureWindowsPath(name)
-            log.debug("  target: %s", target_path)
-            if target_path.exists():
-                log.debug("    target path exists, will remove")
-                target_path.unlink()
-            log.debug("    copy: %s -> %s", source_path, target_path)
-            shutil.copy(source_path, target_path)
+        if host.is_windows:
+            self.map_section('map.windows')
+
+    @cached_property
+    def targets(self):
+        """
+        defines all of the places where preferences files will be installed
+        """
+        if host.is_linux:
+            return [targets.Linux(), targets.WSLHost()]
+
+        if host.is_windows:
+            return [targets.Windows()]
+
+        return []
+
+    def map_file(self, source_path, target_path):
+        if not source_path.is_absolute():
+            source_path = host.dotfiles_root / source_path
+
+        print(f"source path: {source_path}")
+        print(f"source drive: {source_path.drive}")
+        if not source_path.exists():
+            print('skip: no such file')
+            return
+
+        for target in self.targets:
+            target.map_file(source_path, target_path)
+
+    @property
+    def config_path(self):
+        # pylint: disable=missing-function-docstring
+        return self.options.config
 
     @cached_property
     def config(self):
         """
-        loads the json configuration
+        the contents of our configuration file
         """
         with open(self.config_path, 'r', encoding='utf-8') as config_fp:
             log.debug("loading config from path %s", self.config_path)
             return json.load(config_fp)
 
-    @property
-    def prefs_dir(self):
-        """
-        directory containing our preferences repo
-        """
-        here = pathlib.Path(os.path.realpath(__file__))
-        return here.parent.parent
-
-    @cached_property
-    def windows_home_dir(self):
-        """
-        Finds the home directory of the user's Windows home directory and
-        returns it as a Posix path representing its mount point from the
-        perspective of WSL.
-        """
-        if not host.is_wsl:
-            raise Exception("cannot get windows home dir from anything other than wsl")
-        res = subprocess.run(['wslvar', 'USERPROFILE'], check=False,
-                capture_output=True)
-        winpath = res.stdout.decode('utf-8').strip()
-        res = subprocess.run(['wslpath', winpath], check=False,
-                capture_output=True)
-        return pathlib.Path(res.stdout.decode('utf-8').strip())
-
-    def setup_file(self, fname):
-        """
-        sets up an individual file
-        """
-        source = self.prefs_dir / fname
-        print(source)
+    def map_section(self, section_name):
+        section = self.options.config[section_name]
+        for source_name in section:
+            target_name = section[source_name]
+            source_path = pathlib.Path(source_name)
+            target_path = pathlib.Path(target_name)
+            print(f"Map {source_path} to {target_path}")
+            self.map_file(source_path, target_path)
