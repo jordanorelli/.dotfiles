@@ -5,6 +5,7 @@ map <F12> :source $MYVIMRC<CR>
 " Plugins -------------------------------------------------------------------{{{
 " set the runtime path to include Vundle and initialize
 if has('nvim') && has('win32')
+  lua require('plugins')
   set rtp+=~/AppData/Local/nvim/bundle/Vundle.vim
 else
   set rtp+=~/.vim/bundle/Vundle.vim
@@ -25,6 +26,7 @@ call vundle#begin()
   Plugin 'tpope/vim-surround'       " edits surrounding quotes and parens and the like
   Plugin 'tpope/vim-rails'          " rails project management stuff
   Plugin 'tpope/vim-repeat'         " fixes the . key for ...something
+  Plugin 'scrooloose/nerdtree'      " better file navigation
   " Plugin 'airblade/vim-gitgutter'   " in-file git integration
   Plugin 'mhinz/vim-signify'
   Plugin 'slim-template/vim-slim'   " what in the 2008 is this
@@ -34,7 +36,6 @@ call vundle#begin()
   Plugin 'nanotech/jellybeans.vim'  " the best colorscheme
   Plugin 'ervandew/supertab'        " makes tab better apparently
   Plugin 'scrooloose/nerdcommenter' " no idea if I'm even using this
-  Plugin 'scrooloose/nerdtree'      " better file navigation
   Plugin 'Align'                    " aligns things on demand
   Plugin 'tomtom/tlib_vim'          " dependency of flashdevelop
   Plugin 'endel/flashdevelop.vim'   " this is probably old now
@@ -236,13 +237,13 @@ if has("autocmd")
       \   exe "normal! g`\"" |
       \ endif
 
-    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-    autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-    autocmd FileType python set omnifunc=pythoncomplete#Complete
-    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
     if !has('nvim')
+      autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+      autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+      autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+      autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+      autocmd FileType python set omnifunc=pythoncomplete#Complete
+      autocmd FileType css set omnifunc=csscomplete#CompleteCSS
       autocmd FileType rust set omnifunc=ale#completion#OmniFunc
     endif
 
