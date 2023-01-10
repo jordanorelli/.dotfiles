@@ -8,6 +8,7 @@ import os
 import pathlib
 import platform
 import subprocess
+import sys
 import shutil
 from functools import cached_property
 
@@ -29,7 +30,7 @@ class Installer:
         """
         if host.is_windows and not host.is_admin:
             print("You are not admin: admin is required on Windows")
-            os.exit(1)
+            sys.exit(1)
 
         print("linking in home files")
         home = self.options.config['home']
@@ -52,7 +53,7 @@ class Installer:
         defines all of the places where preferences files will be installed
         """
         if host.is_linux:
-            return [targets.Linux(), targets.WSLHost()]
+            return [targets.Linux()]
 
         if host.is_windows:
             return [targets.Windows()]
