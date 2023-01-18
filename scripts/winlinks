@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+"""
+creates hardlinks to files in windows
+"""
+
+import platform
+import sys
+
+if platform.system() != 'Windows':
+    print("You gotta run this on windows")
+    sys.exit(1)

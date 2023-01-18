@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+"""
+places the wsl instance into winmode
+"""
+
+import os
+import pathlib
+import subprocess
+import shutil
+
+env = os.environ
+env['PS1'] = f"(W) {env['PS1']}"
+
+path = env['PATH']
+parts = path.split(':')
+
+winbin_dir = pathlib.Path('/home/jorelli/.config/winbin')
+winbin_dir.mkdir(parents=True, exist_ok=True)
+
+links = {
+    'cargo': '/mnt/c/Users/jordan/.cargo/bin/cargo.exe',
+    'python': '/mnt/c/Users/jordan/AppData/Local/Microsoft/WindowsApps/python.exe',
+}
+
+for k, v in links.items():
+    target_path = winbin_dir / k
+    target_path.symlink_to(v)
+
+parts.insert(0, '/home/jorelli/.config/winbin')
+env['PATH'] = ':'.join(parts)
+
+subprocess.run('/usr/bin/bash --norc', shell=True, check=False, env=env)
+
+shutil.rmtree(winbin_dir)
