@@ -3,3 +3,5 @@ if !has('nvim')
 endif
 
 nnoremap <F5> :Cargo run<CR>
+
+let g:rustfmt_autosave = 1

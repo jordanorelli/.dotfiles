@@ -16,6 +16,7 @@ from installer import host
 from installer.options import Options
 from installer import log
 from installer import targets
+from installer import sections
 
 class Installer:
     """
@@ -31,6 +32,17 @@ class Installer:
         if host.is_windows and not host.is_admin:
             print("You are not admin: admin is required on Windows")
             sys.exit(1)
+
+        config = self.options.config
+        for section_name in config.sections():
+            try:
+                T = self.parse_section_name(section_name)
+            except ValueError as e:
+                print(f"error reading section: {e}")
+                continue
+            section = T.from_section(section_name, **config[section_name])
+            print(f"Section: {section}")
+            section.run()
 
         print("linking in home files")
         home = self.options.config['home']
@@ -95,3 +107,9 @@ class Installer:
             target_path = pathlib.Path(target_name)
             print(f"Map {source_path} to {target_path}")
             self.map_file(source_path, target_path)
+
+    def parse_section_name(self, section_name):
+        if section_name == "home":
+            return sections.Home
+        raise ValueError(f"unprocessable section name: {section_name}")
+
