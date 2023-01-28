@@ -2,6 +2,7 @@
 """
 installs preferences
 """
-from installer import Installer
+
+from prefs import Installer
 installer = Installer()
 installer.run()

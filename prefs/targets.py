@@ -8,7 +8,7 @@ import shutil
 import os
 from functools import cached_property
 
-from installer import host
+from . import host
 
 class Target:
     """

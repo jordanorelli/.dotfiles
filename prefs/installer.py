@@ -1,22 +1,12 @@
-"""
-just exists to define our installer
-"""
-
-import argparse
-import json
-import os
 import pathlib
-import platform
-import subprocess
 import sys
-import shutil
+import json
 from functools import cached_property
 
-from installer import host
-from installer.options import Options
-from installer import log
-from installer import targets
-from installer import sections
+from . import host
+from . import sections
+from . import targets
+from .options import Options
 
 class Installer:
     """

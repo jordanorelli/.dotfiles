@@ -6,7 +6,8 @@ import argparse
 import configparser
 import pathlib
 
-from installer import log, host
+from . import log
+from . import host
 
 class Options:
     """
