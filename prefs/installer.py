@@ -7,6 +7,7 @@ from . import host
 from . import sections
 from . import targets
 from .options import Options
+from .resource import Resource
 
 class Installer:
     """
@@ -19,6 +20,10 @@ class Installer:
         """
         runs the install process
         """
+        if self.options.x:
+            self.run_x()
+            return
+
         if host.is_windows and not host.is_admin:
             print("You are not admin: admin is required on Windows")
             sys.exit(1)
@@ -48,6 +53,15 @@ class Installer:
 
         if host.is_windows:
             self.map_section('map.windows')
+
+    def run_x(self):
+        config = self.options.config
+        for section_name in config.sections():
+            print("sections:")
+            print(f"  {section_name}")
+            if r := Resource.from_name(section_name):
+                print(f"  {r}")
+                r.parse_section(config[section_name])
 
     @cached_property
     def targets(self):

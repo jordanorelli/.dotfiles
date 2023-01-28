@@ -18,16 +18,7 @@ class Options:
         """
         creates an options object by parsing the command-line
         """
-        parser = argparse.ArgumentParser(
-                prog = 'install',
-                description = """
-                installs preferences files. This is designed to work on a bunch
-                of different systems, and can manage Windows preferences from
-                WSL.
-                """)
-        parser.add_argument('-v', '--verbose', action='store_true')
-        parser.add_argument('-q', '--quiet', action='store_true')
-        parser.add_argument('-c', '--config', help="path to config file")
+        parser = cls.create_cli_parser()
         options = cls()
         parser.parse_args(namespace=options)
 
@@ -38,6 +29,19 @@ class Options:
             log.setLevel(10)
 
         return options
+
+    @classmethod
+    def create_cli_parser(cls):
+        parser = argparse.ArgumentParser(
+                prog = 'install',
+                description = """
+                installs preferences files.
+                """)
+        parser.add_argument('-v', '--verbose', action='store_true')
+        parser.add_argument('-q', '--quiet', action='store_true')
+        parser.add_argument('-c', '--config', help="path to config file")
+        parser.add_argument('-x', action='store_true')
+        return parser
 
     @property
     def quiet(self):
