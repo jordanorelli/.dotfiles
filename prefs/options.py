@@ -3,8 +3,8 @@ cli options
 """
 
 import argparse
-import configparser
 import pathlib
+from functools import cached_property
 
 from . import log
 from . import host
@@ -61,21 +61,8 @@ class Options:
     def verbose(self, val):
         self._verbose = val
 
-    @property
-    def config(self):
-        # pylint: disable=missing-function-docstring
-        return self._config
-
-    @config.setter
-    def config(self, val):
-        if val is None:
-            path = host.dotfiles_root / "config.ini"
-        else:
-            path = pathlib.Path(val)
-
-        with open(path, 'r', encoding='utf-8') as config_file:
-            parser = configparser.ConfigParser()
-            # make keys case-sensitive
-            parser.optionxform = str
-            parser.read_file(config_file)
-            self._config = parser
+    @cached_property
+    def config_path(self):
+        if not self.config:
+            self.config = host.dotfiles_root / "config.ini"
+        return pathlib.Path(self.config)

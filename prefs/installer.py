@@ -1,6 +1,7 @@
+import configparser
+import json
 import pathlib
 import sys
-import json
 from functools import cached_property
 
 from . import host
@@ -16,6 +17,17 @@ class Installer:
     def __init__(self):
         self.options = Options.from_cli_args()
 
+    @cached_property
+    def config(self):
+        path = self.options.config_path
+        with open(path, 'r', encoding='utf-8') as config_file:
+            parser = configparser.ConfigParser()
+            # make keys case-sensitive
+            parser.optionxform = str
+            parser.read_file(config_file)
+            return parser
+            self._config = parser
+
     def run(self):
         """
         runs the install process
@@ -28,7 +40,7 @@ class Installer:
             print("You are not admin: admin is required on Windows")
             sys.exit(1)
 
-        config = self.options.config
+        config = self.config
         for section_name in config.sections():
             try:
                 T = self.parse_section_name(section_name)
@@ -55,13 +67,12 @@ class Installer:
             self.map_section('map.windows')
 
     def run_x(self):
-        config = self.options.config
-        for section_name in config.sections():
+        for section_name in self.config.sections():
             print("sections:")
             print(f"  {section_name}")
             if r := Resource.from_name(section_name):
                 print(f"  {r}")
-                r.parse_section(config[section_name])
+                r.parse_section(self.config[section_name])
 
     @cached_property
     def targets(self):
@@ -94,14 +105,14 @@ class Installer:
         # pylint: disable=missing-function-docstring
         return self.options.config
 
-    @cached_property
-    def config(self):
-        """
-        the contents of our configuration file
-        """
-        with open(self.config_path, 'r', encoding='utf-8') as config_fp:
-            log.debug("loading config from path %s", self.config_path)
-            return json.load(config_fp)
+    # @cached_property
+    # def config(self):
+    #     """
+    #     the contents of our configuration file
+    #     """
+    #     with open(self.config_path, 'r', encoding='utf-8') as config_fp:
+    #         log.debug("loading config from path %s", self.config_path)
+    #         return json.load(config_fp)
 
     def map_section(self, section_name):
         section = self.options.config[section_name]
