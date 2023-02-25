@@ -79,7 +79,3 @@ fi
 
 echo "installing Vim plugins"
 vim +PluginInstall +qall
-
-if uname -a | grep -q WSL; then
-    "$base_dir/wsl/install.sh" -u JordanOrelli
-fi
