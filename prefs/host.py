@@ -10,7 +10,7 @@ import sys
 import pathlib
 from functools import cached_property
 
-class _Host:
+class Host:
     """
     hacking the python module system a little to make the module look like a
     singleton object so that it can have properties
@@ -54,5 +54,11 @@ class _Host:
         here = pathlib.Path(os.path.realpath(__file__))
         return here.parent.parent
 
+    @property
+    def home(self):
+        """
+        the home directory
+        """
+        return pathlib.Path.home()
 
-sys.modules[__name__] = _Host()
+sys.modules[__name__] = Host()

@@ -1,33 +1,32 @@
+from . import host
+from .linker import Linker
+
 class Home:
-    def __init__(self, label = None):
-        self.label = label
+    resource_name = 'home'
 
-    @classmethod
-    def from_name(cls, name):
-        """
-        Builds a Home struct from a given name
-        """
-        if name.startswith('home'):
-            label = name.removeprefix('home').strip()
-            return cls(label)
-        return None
-
-    def parse_section(self, section):
-        mapping = {
-            'files': self.parse_files
-        }
-        for key in section:
-            if fn := mapping.get(key):
-                val = section[key]
-                fn(val)
-            else:
-                raise KeyError(f"Home has no such config key: {key}")
+    def __init__(self, label, section):
+        self.label = label or None
+        self.parse_files(section.get('files', ''))
 
     def parse_files(self, text):
+        self.files = []
         lines = [s for s in text.splitlines() if s]
-        print(f"      parse_files: {lines}")
+        for line in lines:
+            parts = line.split(">", 2)
+            if len(parts) == 1:
+                pair = (parts[0].strip(), parts[0].strip())
+            else:
+                pair = (parts[0].strip(), parts[1].strip())
+            self.files.append(pair)
 
     def __repr__(self):
         if self.label:
             return f'<Home: {self.label}>'
         return '<Home>'
+
+    def run(self):
+        linker = Linker(host.dotfiles_root, host.home)
+        for pair in self.files:
+            source_path = host.dotfiles_root / pair[0]
+            target_path = host.home / pair[1]
+            linker.link(source_path, target_path)

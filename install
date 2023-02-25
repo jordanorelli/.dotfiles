@@ -3,6 +3,6 @@
 installs preferences
 """
 
-from prefs import Installer
+from prefs.installer import Installer
 installer = Installer()
 installer.run()
