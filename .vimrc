@@ -37,8 +37,6 @@ call vundle#begin()
   Plugin 'ervandew/supertab'        " makes tab better apparently
   Plugin 'scrooloose/nerdcommenter' " no idea if I'm even using this
   Plugin 'Align'                    " aligns things on demand
-  Plugin 'tomtom/tlib_vim'          " dependency of flashdevelop
-  Plugin 'endel/flashdevelop.vim'   " this is probably old now
   Plugin 'ctrlpvim/ctrlp.vim'       " don't actually know how to use this honestly
   Plugin 'itchyny/lightline.vim'    " fancy status line
   Plugin 'heavenshell/vim-jsdoc'    " js docs?

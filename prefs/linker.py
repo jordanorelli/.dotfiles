@@ -1,4 +1,6 @@
 import pathlib
+import shutil
+import os
 
 from . import host
 
@@ -17,11 +19,34 @@ class Linker:
             target_path = self.target_root / target_path
 
         if not target_path.parent.exists():
-            print("creating missing parent directories for target")
+            print(f"mkdir -p {target_path.parent}")
             parent_dir = target_path.parent
             parent_dir.mkdir(parents=True)
 
-        print(f"{source_path} -> {target_path}")
+        exists = os.path.exists(str(target_path))
+        is_link = os.path.islink(str(target_path))
+        if target_path.exists():
+            if target_path.is_symlink():
+                if target_path.resolve() == source_path:
+                    return
+                print(f"rm {target_path} (symlink)")
+                target_path.unlink()
+            elif target_path.is_file():
+                print(f"rm {target_path} (file)")
+                target_path.unlink()
+            elif target_path.is_dir():
+                print(f"rm {target_path} (dir)")
+                shutil.rmtree(target_path)
+            else:
+                print(f"skip {source_path}: unable to handle target at {target_path}: is not a symlink, file, or directory")
+                return
+        else:
+            if target_path.is_symlink():
+                print(f"rm {target_path} (broken symlink)")
+                target_path.unlink()
+
+        target_path.symlink_to(source_path)
+        print(f"link {target_path} -> {source_path}")
 
 class LinkFiles:
     resource_name = 'link-files'
