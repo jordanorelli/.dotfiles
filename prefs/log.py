@@ -5,7 +5,7 @@ a logging object
 import logging
 import sys
 
-class _Log:
+class Log:
     def __init__(self):
         logging.basicConfig(level=logging.INFO, format='')
         self._target = logging.getLogger()
@@ -16,4 +16,4 @@ class _Log:
     def __dir__(self):
         return dir(self._target)
 
-sys.modules[__name__] = _Log()
+sys.modules[__name__] = Log()

@@ -8,6 +8,7 @@ import os
 import platform
 import sys
 import pathlib
+import shutil
 from functools import cached_property
 
 class Host:
@@ -60,5 +61,11 @@ class Host:
         the home directory
         """
         return pathlib.Path.home()
+
+    def has(self, cmd):
+        """
+        whether or not the machine has the specified command
+        """
+        return shutil.which(cmd) is not None
 
 sys.modules[__name__] = Host()
