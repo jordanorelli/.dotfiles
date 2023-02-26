@@ -1,9 +1,10 @@
 from .home import Home
 from .linker import LinkFiles
 from .cargo import CargoInstall
+from .run import Run
 
 class Resource:
-    resource_types = [Home, LinkFiles, CargoInstall]
+    resource_types = [Home, LinkFiles, CargoInstall, Run]
 
     @classmethod
     def from_name(cls, name):

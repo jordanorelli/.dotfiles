@@ -28,14 +28,14 @@ class Installer:
             return parser
 
     def run(self):
-        resources = []
         for name in self.config.sections():
             section = self.config[name]
             if self.when(section):
                 r = Resource.from_section(name, section)
-                resources.append(r)
-        for r in resources:
-            r.run()
+                print(f"RUN  [{name}]")
+                r.run()
+            else:
+                print(f"SKIP [{name}]")
 
     def when(self, section):
         if clause := section.get('when', None):
