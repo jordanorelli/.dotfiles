@@ -1,0 +1,12 @@
+{
+    "git.ignoreMissingGitWarning": true,
+    "editor.codeLens": false,
+    "extensions.ignoreRecommendations": false,
+    "window.zoomLevel": 1,
+    "go.useLanguageServer": true,
+    "editor.lineNumbers": "on",
+    "go.formatTool": "goimports",
+    "editor.minimap.enabled": false,
+    "editor.smoothScrolling": true,
+    "zigLanguageClient.path": "C:\\Users\\Jordan\\bin\\zls.exe"
+}
