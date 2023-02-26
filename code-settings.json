@@ -7,6 +7,5 @@
     "editor.lineNumbers": "on",
     "go.formatTool": "goimports",
     "editor.minimap.enabled": false,
-    "editor.smoothScrolling": true,
-    "zigLanguageClient.path": "C:\\Users\\Jordan\\bin\\zls.exe"
+    "editor.smoothScrolling": true
 }
