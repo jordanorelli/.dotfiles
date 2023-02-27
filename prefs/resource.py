@@ -2,9 +2,10 @@ from .home import Home
 from .linker import LinkFiles
 from .cargo import CargoInstall
 from .run import Run
+from . import git
 
 class Resource:
-    resource_types = [Home, LinkFiles, CargoInstall, Run]
+    resource_types = [Home, LinkFiles, CargoInstall, Run, git.Repo]
 
     @classmethod
     def from_name(cls, name):

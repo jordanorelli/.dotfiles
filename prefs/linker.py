@@ -45,7 +45,10 @@ class Linker:
                 print(f"rm {target_path} (broken symlink)")
                 target_path.unlink()
 
-        target_path.symlink_to(source_path)
+        try:
+            target_path.symlink_to(source_path)
+        except PermissionError as e:
+            print(f"ERROR creating link: {e}")
         print(f"link {target_path} -> {source_path}")
 
 class LinkFiles:
